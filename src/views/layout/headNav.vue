@@ -2,7 +2,7 @@
   <el-menu 
     mode="horizontal"
   >
-    <el-menu-item>
+    <el-menu-item index="1">
       <el-dropdown>
         <span class="el-dropdown-link avatar">
           <img src="../../common/img/jerry.jpeg">
