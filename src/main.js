@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
+import ISvg from 'components/i-svg/i-svg'
 
 import 'common/scss/index.scss'
 import 'element-ui/lib/theme-default/index.css'
@@ -11,6 +12,7 @@ import 'element-ui/lib/theme-default/index.css'
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
+Vue.component('i-svg', ISvg)
 
 /* eslint-disable no-new */
 new Vue({
