@@ -1,11 +1,13 @@
 <template>
   <el-menu 
-    default-active="1" 
+    :default-active="activeIndex" 
     :collapse="isCollapse"
     theme="dark"
     class="el-menu-vertical"
+    router
+    unique-opened
   >
-    <el-menu-item index="1">
+    <el-menu-item index="home">
       <i-svg icon="home"></i-svg>
       <span slot="title">首页</span>
     </el-menu-item>
@@ -21,10 +23,17 @@
       <i class="el-icon-menu"></i>
       <span slot="title">导航二</span>
     </el-menu-item>
-    <el-menu-item index="4">
-      <i class="el-icon-setting"></i>
-      <span slot="title">导航三</span>
-    </el-menu-item>
+    <el-submenu index="4">
+      <template slot="title">
+        <i class="el-icon-setting"></i> 
+        <span slot="title">基础信息</span>
+      </template> 
+      <el-menu-item index="user">用户管理</el-menu-item>
+      <el-menu-item index="4-2">教师管理</el-menu-item>
+      <el-menu-item index="4-3">课程管理</el-menu-item>
+      <el-menu-item index="4-4">校区管理</el-menu-item>
+      <el-menu-item index="4-5">教师管理</el-menu-item>      
+    </el-submenu>
   </el-menu>
 </template>
 
@@ -34,6 +43,26 @@ export default {
     isCollapse: {
       type: Boolean,
       default: false
+    }
+  },
+  data () {
+    return {
+      activeIndex: ''
+    }
+  },
+  created () {
+    this._getActiveIndex()
+  },
+  methods: {
+    _getActiveIndex () {
+      const {path} = this.$route
+      const start = path.lastIndexOf('/')
+      this.activeIndex = path.substring(start + 1)
+    }
+  },
+  watch: {
+    $route () {
+      this._getActiveIndex()
     }
   }
 }
