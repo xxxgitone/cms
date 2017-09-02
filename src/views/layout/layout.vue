@@ -4,9 +4,9 @@
        <h1 class="title" :class="{hide: isCollapse}">
         <span class="title-text">艺术学校(浦东)校区</span>
       </h1> 
-      <h1 class="title collapse-title" v-show="isCollapse">
+      <h1 class="title collapse-title" :class="{show: isCollapse}">
         <span class="title-text">艺</span>
-      </h1>
+      </h1>  
       <side-nav :isCollapse="isCollapse"></side-nav>
     </div>
     <div class="side-left">
@@ -22,11 +22,11 @@
           </el-col>
         </el-row>
       </div> 
-      <div class="main-content">
-        <el-breadcrumb separator="/" class="breadcrumb">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-        </el-breadcrumb>
+      <div class="main">
+        <Breadcrumb :breadcrumbs="breadcrumbs"></Breadcrumb>
+        <div class="main-content">
+          <router-view></router-view>
+        </div>
       </div>
     </div>
   </div>
@@ -35,12 +35,17 @@
 <script>
 import SideNav from './sideNav'
 import HeadNav from './headNav'
+import Breadcrumb from 'components/breadcrumb/breadcrumb'
 
 export default {
   data () {
     return {
-      isCollapse: false
+      isCollapse: false,
+      breadcrumbs: []
     }
+  },
+  created () {
+    this._getBreadcrumb()
   },
   computed: {
     iconName () {
@@ -50,17 +55,30 @@ export default {
   methods: {
     switchCollapse () {
       this.isCollapse = !this.isCollapse
+    },
+    _getBreadcrumb () {
+      const matched = this.$route.matched.slice(1)
+      matched.forEach(item => {
+        this.breadcrumbs = item.name ? item.name : []
+      })
+    }
+  },
+  watch: {
+    $route () {
+      this._getBreadcrumb()
     }
   },
   components: {
     SideNav,
-    HeadNav
+    HeadNav,
+    Breadcrumb
   }
 }
 </script>
 
 <style lang="scss" scopde>
 @import "../../common/scss/variable.scss";
+@import "../../common/scss/mixins.scss";
 
 .layout {
   height: 100%;
@@ -70,14 +88,12 @@ export default {
   height: 100%;
   background: $color-bg-dark;
   .title {
-    display: flex;
+    @include flexCenter;
     font-size: $font-size-large-x;
     color: $color-text-dark-white;
-    align-items: center;
-    justify-content: center;
     height: 60px;
     width: 220px;
-    transition: width .3s;
+    transition: width .3s, transform .3s;
     .title-text {
       display: block;
       overflow: hidden;
@@ -92,6 +108,7 @@ export default {
   .hide {
     opacity: 0;
     width: 0;
+    transform: translateX(-110%);
   }
   .collapse-title {
     width: auto;
@@ -99,6 +116,13 @@ export default {
     z-index: 1;
     top: 0;
     left: 15px;
+    opacity: 0;
+    transform: translateX(200%);
+    transition: opacity .3s, transform .3s;
+  }
+  .show {
+    transform: translateX(0);
+    opacity: 1;
   }
 }
 .side-left {
@@ -127,10 +151,10 @@ export default {
       }
     }
   }
-  .main-content {
-    min-height: 100%;
-    .breadcrumb {
-      margin: 16px;
+  .main {
+    min-height: calc(100%-60px);
+    .main-content {
+      margin: 0 24px 24px 24px;
     }
   }
 }
