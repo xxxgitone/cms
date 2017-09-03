@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 const Layout = () => import('views/layout/layout')
 const UserManage = () => import('views/userManage/userManage')
+const Home = () => import('views/home/home')
 
 Vue.use(Router)
 
@@ -15,7 +16,7 @@ export default new Router({
       children: [
         {
           path: 'home',
-          component: UserManage
+          component: Home
         },
         {
           path: 'user',
