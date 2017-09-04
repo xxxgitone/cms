@@ -16,7 +16,6 @@ const UserSchema = new Schema({
   },
   campus: String,
   role: String,
-  job: String,
   password: String,
   avatar: String
 })
