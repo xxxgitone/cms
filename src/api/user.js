@@ -1,7 +1,9 @@
 import axios from 'axios'
+import {param} from 'common/js/utils'
 
-export const getUsers = () => {
-  const url = '/api/users'
+export const getUsers = (data) => {
+  let url = '/api/users'
+  url += data ? '?' + param(data) : ''
   return axios.get(url)
   .then((res) => {
     return Promise.resolve(res.data)
