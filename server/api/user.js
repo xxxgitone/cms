@@ -3,7 +3,8 @@ const router = express.Router()
 const User = require('../models/user')
 
 router.get('/users', (req, res, next) => {
-  User.find({}, {password: 0}).then((users) => {
+  const query = req.query
+  User.find(query, {password: 0}).then((users) => {
     res.json({
       code: 0,
       users
@@ -35,7 +36,7 @@ router.put('/users', (req, res, next) => {
   const _id = userInfo._id
   User.findOne({_id: _id}).then((user) => {
     if (user.account === userInfo.account) {
-      User.update({_id: _id}, userInfo).then((count) => {
+      User.update({_id: _id}, userInfo).then((item) => {
         res.json({
           code: 0,
           msg: `修改1条数据成功`
@@ -49,7 +50,7 @@ router.put('/users', (req, res, next) => {
             msg: '账户名已存在'
           })
         } else {
-          User.update({_id: _id}, userInfo).then((count) => {
+          User.update({_id: _id}, userInfo).then((item) => {
             res.json({
               code: 0,
               msg: `修改1条数据成功`
@@ -63,12 +64,23 @@ router.put('/users', (req, res, next) => {
 
 router.delete('/users', (req, res, next) => {
   const {_id} = req.query
-  User.findByIdAndRemove({_id: _id}).then((item) => {
-    res.json({
-      code: 0,
-      msg: '删除1条数据成功'
+  if (_id.indexOf(',') > -1) {
+    const _ids = _id.split(',')
+    User.remove({_id: {$in: _ids}}).then((item) => {
+      const count = item.result.n
+      res.json({
+        code: 0,
+        msg: `删除${count}条数据成功`
+      })
     })
-  })
+  } else {
+    User.findByIdAndRemove({_id: _id}).then((item) => {
+      res.json({
+        code: 0,
+        msg: '删除1条数据成功'
+      })
+    })
+  }
 })
 
 module.exports = router
