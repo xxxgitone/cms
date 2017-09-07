@@ -112,6 +112,7 @@
       </el-dialog>
     </el-row>
     <el-table
+      v-loading.body="dataLoading"
       :data="users"
       border
       tooltip-effect="dark"
@@ -163,6 +164,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-row>
+      <el-col :span="24" class="pagination" v-show="!dataLoading && users.length > 0 && total > 10">
+        <el-pagination 
+          layout="total, prev, pager, next" 
+          :total="total"
+          @current-change="handleCurrentChange"
+        ></el-pagination>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -250,9 +260,13 @@ export default {
         ]
       },
       loading: false,
+      dataLoading: true,
       operationType: 'add',
       multipleSelection: [],
       editable: false,
+      pagenum: 1,
+      pagesize: 10,
+      total: 0,
       pickerOptions: {
         disabledDate (time) {
           return time.getTime() > Date.now() - 8.64e7
@@ -289,7 +303,19 @@ export default {
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
+    handleCurrentChange (val) {
+      if (this.campusVal) {
+        return
+      }
+      this.pagenum = val
+      const data = {
+        pagesize: 10,
+        pagenum: this.pagenum
+      }
+      this._getUsers(data)
+    },
     handleChange (val) {
+      this.campusVal = val
       const data = {campus: val}
       this._getUsers(data)
       if (!val) {
@@ -414,8 +440,11 @@ export default {
       }
     },
     _getUsers (data) {
+      this.dataLoading = true
       getUsers(data).then((res) => {
+        this.dataLoading = false
         if (res.code === OK_CODE) {
+          this.total = res.total
           this.users = res.users
         }
       })
@@ -449,6 +478,10 @@ export default {
     .add {
       text-align: right;
     }
+  }
+  .pagination {
+    margin: 16px 0;
+    text-align: right;
   }
 }
 </style>
