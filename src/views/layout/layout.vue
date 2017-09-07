@@ -28,6 +28,7 @@
           <router-view></router-view>
         </div>
       </div>
+      <app-footer></app-footer>
     </div>
   </div>
 </template>
@@ -35,6 +36,7 @@
 <script>
 import SideNav from './sideNav'
 import HeadNav from './headNav'
+import AppFooter from './footer'
 import Breadcrumb from 'components/breadcrumb/breadcrumb'
 
 export default {
@@ -71,6 +73,7 @@ export default {
   components: {
     SideNav,
     HeadNav,
+    AppFooter,
     Breadcrumb
   }
 }
@@ -128,6 +131,9 @@ export default {
 .side-left {
   flex: 1;
   overflow-y: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   .head-nav {
     background: $color-bg-light;
     width: 100%;
@@ -152,7 +158,7 @@ export default {
     }
   }
   .main {
-    min-height: calc(100%-60px);
+    flex: 1;
     .main-content {
       margin: 0 24px 24px 24px;
     }
