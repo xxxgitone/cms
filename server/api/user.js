@@ -3,12 +3,22 @@ const router = express.Router()
 const User = require('../models/user')
 
 router.get('/users', (req, res, next) => {
-  const query = req.query
-  User.find(query, {password: 0}).then((users) => {
-    res.json({
-      code: 0,
-      users
-    })
+  const query = req.query.campus ? {campus: req.query.campus} : {}
+  const pagenum = Number(req.query.pagenum) || 1
+  const pagesize = Number(req.query.pagesize) || 10
+  console.log(req.query)
+  User.find(query, {password: 0}).count().then((count) => {
+    const total = count
+    User.find(query, {password: 0})
+      .skip((pagenum - 1) * pagesize)
+      .limit(pagesize)
+      .then((users) => {
+        res.json({
+          total,
+          code: 0,
+          users
+        })
+      })
   }).catch(next)
 })
 
