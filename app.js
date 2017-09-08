@@ -35,6 +35,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 //   avatar: 'https://raw.githubusercontent.com/xxxgitone/learningProcess/master/issueImg/jerry.jpeg'
 // })
 
+app.use(require('./server/middlewares/jwtMiddle'))
 app.use('/api', userRoutes)
 
 app.use((err, req, res, next) => {
