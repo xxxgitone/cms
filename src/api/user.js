@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'common/js/axiosServer'
 import {param} from 'common/js/utils'
 
 export const getUsers = (data) => {
@@ -10,9 +10,25 @@ export const getUsers = (data) => {
   })
 }
 
+export const getUserByToken = () => {
+  let url = '/api/user'
+  return axios.get(url)
+  .then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
 export const addUser = (userInfo) => {
   const url = '/api/users'
   return axios.post(url, userInfo)
+  .then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+export const loginByAccount = (loginForm) => {
+  const url = '/api/users'
+  return axios.post(url, loginForm)
   .then((res) => {
     return Promise.resolve(res.data)
   })
