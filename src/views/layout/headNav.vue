@@ -3,13 +3,13 @@
     mode="horizontal"
   >
     <el-menu-item index="1">
-      <el-dropdown>
+      <el-dropdown @command="handleCommand">
         <span class="el-dropdown-link avatar">
           <img src="../../common/img/jerry.jpeg">
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>个人中心</el-dropdown-item>
-          <el-dropdown-item>退出登录</el-dropdown-item>
+          <el-dropdown-item command="layout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-menu-item>
@@ -17,7 +17,26 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
+
 export default {
+  methods: {
+    handleCommand (command) {
+      if (command === 'layout') {
+        this.Logout().then(() => {
+          this.$router.push('/')
+          this.$message({
+            showClose: true,
+            message: '退出成功',
+            type: 'success'
+          })
+        })
+      }
+    },
+    ...mapActions([
+      'Logout'
+    ])
+  }
 }
 </script>
 
