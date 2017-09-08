@@ -1,12 +1,13 @@
 const express = require('express')
 const router = express.Router()
+const jwt = require('jsonwebtoken')
+const config = require('../config/config')
 const User = require('../models/user')
 
 router.get('/users', (req, res, next) => {
   const query = req.query.campus ? {campus: req.query.campus} : {}
   const pagenum = Number(req.query.pagenum) || 1
   const pagesize = Number(req.query.pagesize) || 10
-  console.log(req.query)
   User.find(query, {password: 0}).count().then((count) => {
     const total = count
     User.find(query, {password: 0})
@@ -22,23 +23,64 @@ router.get('/users', (req, res, next) => {
   }).catch(next)
 })
 
+router.get('/user', (req, res, next) => {
+  const {id} = req.decoded
+  User.findById(id).then((user) => {
+    res.json({
+      code: 0,
+      user
+    })
+  })
+})
+
 router.post('/users', (req, res, next) => {
   const userInfo = req.body
-  User.find({account: userInfo.account}).then((user) => {
-    if (user.length > 0) {
-      res.json({
-        code: -1,
-        msg: '账户名已存在'
-      })
-    } else {
-      User.create(userInfo).then((newUser) => {
+  const {action} = userInfo
+  if (action === 'login') {
+    User.findOne({account: userInfo.account}).then((user) => {
+      if (user != null) {
+        if (user.password !== userInfo.password) {
+          res.json({
+            code: -1,
+            msg: '验证失败，密码错误'
+          })
+        } else {
+          const userToken = {
+            account: user.account,
+            id: user._id
+          }
+          const token = jwt.sign(userToken, config.tokenSecret)
+          res.json({
+            code: 0,
+            msg: '登录成功',
+            token: token,
+            role: user.role
+          })
+        }
+      } else {
         res.json({
-          code: 0,
-          user: newUser
+          code: -1,
+          msg: '用户不存在'
         })
-      })
-    }
-  })
+      }
+    })
+  } else {
+    User.find({account: userInfo.account}).then((user) => {
+      if (user.length > 0) {
+        res.json({
+          code: -1,
+          msg: '账户名已存在'
+        })
+      } else {
+        User.create(userInfo).then((newUser) => {
+          res.json({
+            code: 0,
+            user: newUser
+          })
+        })
+      }
+    })
+  }
 })
 
 router.put('/users', (req, res, next) => {
