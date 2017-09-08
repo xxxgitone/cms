@@ -2,7 +2,7 @@
   <div class="layout">
     <div class="side-nav">
        <h1 class="title" :class="{hide: isCollapse}">
-        <span class="title-text">艺术学校(浦东)校区</span>
+        <span class="title-text">{{"艺术学校(" + campus.substr(0, 2) + ")校区"}}</span>
       </h1> 
       <h1 class="title collapse-title" :class="{show: isCollapse}">
         <span class="title-text">艺</span>
@@ -38,6 +38,7 @@ import SideNav from './sideNav'
 import HeadNav from './headNav'
 import AppFooter from './footer'
 import Breadcrumb from 'components/breadcrumb/breadcrumb'
+import {mapGetters} from 'vuex'
 
 export default {
   data () {
@@ -52,7 +53,10 @@ export default {
   computed: {
     iconName () {
       return this.isCollapse ? 'unfold' : 'collapse'
-    }
+    },
+    ...mapGetters([
+      'campus'
+    ])
   },
   methods: {
     switchCollapse () {
