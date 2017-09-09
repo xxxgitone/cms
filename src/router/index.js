@@ -5,6 +5,7 @@ const Layout = () => import('views/layout/layout')
 const UserManage = () => import('views/userManage/userManage')
 const Home = () => import('views/home/home')
 const Login = () => import('views/login/login')
+const TeacherManage = () => import('views/teacherManage/teacherManage')
 
 Vue.use(Router)
 
@@ -32,6 +33,12 @@ export default new Router({
           path: 'user',
           component: UserManage,
           name: ['基础数据', '用户管理'],
+          meta: {role: ['admin', 'front']}
+        },
+        {
+          path: 'teacher',
+          component: TeacherManage,
+          name: ['基础数据', '教师管理'],
           meta: {role: ['admin', 'front']}
         }
       ]
