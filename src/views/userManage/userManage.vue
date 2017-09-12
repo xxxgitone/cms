@@ -179,7 +179,7 @@
 <script>
 import {OK_CODE, ERR_CODE} from 'api/config'
 import {getUsers, addUser, editUser, deleteUser} from 'api/user'
-import {setEmptyString} from 'common/js/utils'
+import {setEmptyString, getIds} from 'common/js/utils'
 
 export default {
   data () {
@@ -413,7 +413,7 @@ export default {
       })
     },
     deleteSelection () {
-      const _ids = this._getIds(this.multipleSelection)
+      const _ids = getIds(this.multipleSelection)
       if (_ids.length === 0) {
         this.$message({
           showClose: true,
@@ -448,15 +448,6 @@ export default {
           this.users = res.users
         }
       })
-    },
-    _getIds (arr) {
-      let _ids = []
-      arr.forEach((item) => {
-        if (item._id) {
-          _ids.push(item._id)
-        }
-      })
-      return _ids
     }
   }
 }

@@ -187,7 +187,7 @@
 <script>
 import {OK_CODE} from 'api/config'
 import {getTeachers, addTeacher, editTeacher, deleteTeacher} from 'api/teacher'
-import {setEmptyString} from 'common/js/utils'
+import {setEmptyString, getIds} from 'common/js/utils'
 
 export default {
   data () {
@@ -408,7 +408,7 @@ export default {
       })
     },
     deleteSelection () {
-      const _ids = this._getIds(this.multipleSelection)
+      const _ids = getIds(this.multipleSelection)
       if (_ids.length === 0) {
         this.$message({
           showClose: true,
@@ -443,15 +443,6 @@ export default {
           this.teachers = res.teachers
         }
       })
-    },
-    _getIds (arr) {
-      let _ids = []
-      arr.forEach((item) => {
-        if (item._id) {
-          _ids.push(item._id)
-        }
-      })
-      return _ids
     }
   }
 }

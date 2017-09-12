@@ -12,3 +12,13 @@ export const param = (data) => {
   }
   return url ? url.substr(1) : ''
 }
+
+export const getIds = (arr) => {
+  let _ids = []
+  arr.forEach((item) => {
+    if (item._id) {
+      _ids.push(item._id)
+    }
+  })
+  return _ids
+}
