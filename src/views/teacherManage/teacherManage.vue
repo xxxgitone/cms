@@ -25,7 +25,7 @@
         ></el-input>
       </el-col>
       <el-col :span="4" class="add">
-        <el-button type="primary" icon="plus" @click="addTeacher">添加教师</el-button>
+        <el-button type="primary" icon="plus" @click="handleAdd">添加教师</el-button>
       </el-col>
       <el-dialog
         :title="title"
@@ -167,8 +167,8 @@
         width="140" 
       >
         <template scope="scope">
-          <el-button :plain="true" type="info" size="small" @click="editTeacher(scope.$index, scope.row)">编辑</el-button>
-          <el-button type="danger" size="small" @click="deleteTeacher(scope.$index, scope.row)">删除</el-button>
+          <el-button :plain="true" type="info" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button type="danger" size="small" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -333,7 +333,7 @@ export default {
       setEmptyString(this.teacherInfo)
       this.dialogHide()
     },
-    addTeacher () {
+    handleAdd () {
       this.operationType = 'add'
       setEmptyString(this.teacherInfo)
       this.dialogShow()
@@ -366,7 +366,7 @@ export default {
         }
       })
     },
-    editTeacher (index, row) {
+    handleEdit (index, row) {
       this.operationType = 'edit'
       this.teacherInfo = Object.assign({}, row)
       this.dialogShow()
@@ -387,7 +387,7 @@ export default {
         }
       })
     },
-    deleteTeacher (index, row) {
+    handleDelete (index, row) {
       this.$confirm('此操作将永久删除该数据，是否继续？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
