@@ -1,29 +1,28 @@
 const jwt = require('jsonwebtoken')
 const config = require('../config/config')
 
-module.exports = (req, res, next) => {
-  const {action} = req.body
+module.exports = async (ctx, next) => {
+  const {action} = ctx.request.body
   if (action === 'login') {
-    next()
+    await next()
   } else {
-    const token = req.headers['cms-token']
+    const token = ctx.request.headers['cms-token']
     if (token) {
-      jwt.verify(token, config.tokenSecret, (err, decoded) => {
-        if (err) {
-          res.json({
-            code: -1,
-            msg: 'token验证失败'
-          })
-        } else {
-          req.decoded = decoded
-          next()
+      const decoded = jwt.verify(token, config.tokenSecret)
+      if (decoded && decoded.id) {
+        ctx.decoded = decoded
+        await next()
+      } else {
+        ctx.body = {
+          code: -1,
+          msg: 'token验证失败'
         }
-      })
+      }
     } else {
-      res.json({
+      ctx.body = {
         code: -1,
         msg: 'No token provided'
-      })
+      }
     }
   }
 }

@@ -1,12 +1,13 @@
-const express = require('express')
+const Koa = require('koa')
 // const path = require('path')
-const logger = require('morgan')
-const bodyParser = require('body-parser')
+const json = require('koa-json')
+const logger = require('koa-logger')
+const bodyParser = require('koa-bodyparser')
 const config = require('./server/config/config')
+const router = require('koa-router')()
 const mongoose = require('mongoose')
-const userRoutes = require('./server/api/user')
-const teacherRoutes = require('./server/api/teacher')
-// const Teacher = require('./server/models/teacher')
+const userRoutes = require('./server/router/user')
+const teacherRoutes = require('./server/router/teacher')
 
 const PORT = process.env.PORT || '3000'
 const ENV = process.env.NODE_ENV || 'development'
@@ -16,34 +17,48 @@ if (ENV === 'development') {
 }
 mongoose.Promise = global.Promise
 
-const app = express()
+const app = new Koa()
 
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
-app.use(logger('dev'))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
-// app.use(express.static(path.join(__dirname, 'public')))
+app.use(logger())
+app.use(bodyParser())
+app.use(json())
 
-// for (var i = 0; i < 25; i++) {
-//   Teacher.create({
-//     userName: `田美丽${i}`,
-//     birthday: +new Date('1991-06-06'),
-//     phoneNumber: 18847960182,
-//     entryDate: +new Date('2013-07-11'),
-//     campus: '浦东校区',
-//     gender: 'F',
-//     job: '美术',
-//     age: 22
-//   })
-// }
+app.use(async (ctx, next) => {
+  const start = new Date()
+  await next()
+  const ms = new Date() - start
+  console.log('%s %s - %s', ctx.method, ctx.url, ms)
+})
+
+app.use(async (ctx, next) => {
+  try {
+    await next()
+  } catch (err) {
+    if (err.status === 401) {
+      ctx.status = 401
+      ctx.body = {
+        code: -1,
+        token: 0,
+        msg: 'token验证失败'
+      }
+    } else {
+      throw err
+    }
+  }
+})
+
+app.on('error', (err, ctx) => {
+  console.log('server error', err)
+})
 
 app.use(require('./server/middlewares/jwtMiddle'))
-app.use('/api', userRoutes)
-app.use('/api', teacherRoutes)
+router.use('/api', userRoutes.routes())
+router.use('/api', teacherRoutes.routes())
 
-app.use((err, req, res, next) => {
-  res.status(442).send({ error: err.message })
-})
+app
+  .use(router.routes())
+  .use(router.allowedMethods())
 
 module.exports = app.listen(PORT, function (err) {
   if (err) {
