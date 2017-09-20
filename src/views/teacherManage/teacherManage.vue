@@ -401,7 +401,11 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this._getTeachers()
+            const data = {
+              pagesize: 10,
+              pagenum: this.pagenum
+            }
+            this._getTeachers(data)
           }
         })
       }).catch(() => {
