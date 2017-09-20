@@ -57,6 +57,7 @@ const loginOrAddUser = async (ctx) => {
       }
     }
   } else {
+    console.log(userInfo)
     const user = await User.find({account: userInfo.account})
     if (user.length > 0) {
       ctx.body = {
@@ -64,12 +65,11 @@ const loginOrAddUser = async (ctx) => {
         msg: '账户名已存在'
       }
     } else {
-      User.create(userInfo).then((newUser) => {
-        ctx.body = {
-          code: 0,
-          user: newUser
-        }
-      })
+      const newUser = await User.create(userInfo)
+      ctx.body = {
+        code: 0,
+        user: newUser
+      }
     }
   }
 }
@@ -80,8 +80,7 @@ const updateUser = async (ctx) => {
   const user = await User.findOne({_id: _id})
   if (user.account === userInfo.account) {
     const item = await User.update({_id: _id}, userInfo)
-    console.log(item)
-    if (item) {
+    if (item.n) {
       ctx.body = {
         code: 0,
         msg: `修改1条数据成功`
@@ -96,7 +95,7 @@ const updateUser = async (ctx) => {
       }
     } else {
       const item = await User.update({_id: _id}, userInfo)
-      if (item) {
+      if (item.n) {
         ctx.body = {
           code: 0,
           msg: `修改1条数据成功`
@@ -110,7 +109,7 @@ const deleteUser = async (ctx) => {
   const {_id} = ctx.request.query
   if (_id.indexOf(',') > -1) {
     const _ids = _id.split(',')
-    const item = User.remove({_id: {$in: _ids}})
+    const item = await User.remove({_id: {$in: _ids}})
     if (item.result.n > 0) {
       const count = item.result.n
       ctx.body = {
@@ -120,7 +119,7 @@ const deleteUser = async (ctx) => {
     }
   } else {
     const item = await User.findByIdAndRemove({_id: _id})
-    if (item) {
+    if (item._id) {
       ctx.body = {
         code: 0,
         msg: '删除1条数据成功'

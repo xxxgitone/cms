@@ -27,8 +27,8 @@ const addTeacher = async (ctx) => {
 const updateTeacher = async (ctx) => {
   const teacher = ctx.request.body
   const _id = teacher._id
-  const data = Teacher.update({_id: _id}, teacher)
-  if (data) {
+  const data = await Teacher.update({_id: _id}, teacher)
+  if (data.n) {
     ctx.body = {
       code: 0,
       msg: `修改1条数据成功`
@@ -40,7 +40,7 @@ const deleteTeacher = async (ctx) => {
   const {_id} = ctx.request.query
   if (_id.indexOf(',') > -1) {
     const _ids = _id.split(',')
-    const item = Teacher.remove({_id: {$in: _ids}})
+    const item = await Teacher.remove({_id: {$in: _ids}})
     const count = item && item.result && item.result.n
     if (count > 0) {
       ctx.body = {
@@ -49,8 +49,8 @@ const deleteTeacher = async (ctx) => {
       }
     }
   } else {
-    const item = Teacher.findByIdAndRemove({_id: _id})
-    if (item) {
+    const item = await Teacher.findByIdAndRemove({_id: _id})
+    if (item._id) {
       ctx.body = {
         code: 0,
         msg: '删除1条数据成功'
