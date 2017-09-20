@@ -178,6 +178,7 @@
           layout="total, prev, pager, next" 
           :total="total"
           @current-change="handleCurrentChange"
+          :current-page.sync="currentPage"
         ></el-pagination>
       </el-col>
     </el-row>
@@ -188,8 +189,10 @@
 import {OK_CODE} from 'api/config'
 import {getTeachers, addTeacher, editTeacher, deleteTeacher} from 'api/teacher'
 import {setEmptyString, getIds} from 'common/js/utils'
+import {managePageMixin} from 'common/js/mixin'
 
 export default {
+  mixins: [managePageMixin],
   data () {
     return {
       options: [
@@ -226,8 +229,8 @@ export default {
       ],
       campusVal: '',
       query: '',
+      currentPage: 1,
       teachers: [],
-      dialogVisible: false,
       teacherInfo: {
         userName: '',
         birthday: '',
@@ -293,12 +296,6 @@ export default {
     this._getTeachers()
   },
   methods: {
-    dialogShow () {
-      this.dialogVisible = true
-    },
-    dialogHide () {
-      this.dialogVisible = false
-    },
     formatGender (gender) {
       if (gender === 'F') {
         return '女'
@@ -310,11 +307,9 @@ export default {
       this.multipleSelection = val
     },
     handleCurrentChange (val) {
-      if (this.campusVal) {
-        return
-      }
       this.pagenum = val
       const data = {
+        campus: this.campusVal ? this.campusVal : '',
         pagesize: 10,
         pagenum: this.pagenum
       }
@@ -326,6 +321,7 @@ export default {
       this._getTeachers(data)
       if (!val) {
         this._getTeachers()
+        this.currentPage = 1
       }
     },
     handleClose () {
@@ -358,6 +354,8 @@ export default {
               })
               this.handleClose()
               this._getTeachers()
+              this.currentPage = 1
+              this.campusVal = ''
             }
           })
         } else {
@@ -383,7 +381,12 @@ export default {
             type: 'success'
           })
           this.handleClose()
-          this._getTeachers()
+          const data = {
+            campus: this.campusVal ? this.campusVal : '',
+            pagesize: 10,
+            pagenum: this.pagenum
+          }
+          this._getTeachers(data)
         }
       })
     },
@@ -394,7 +397,6 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteTeacher(row._id).then((res) => {
-          console.log(res)
           if (res.code === OK_CODE) {
             this.$message({
               showClose: true,
@@ -402,6 +404,7 @@ export default {
               type: 'success'
             })
             const data = {
+              campus: this.campusVal ? this.campusVal : '',
               pagesize: 10,
               pagenum: this.pagenum
             }
@@ -433,7 +436,12 @@ export default {
                 type: 'success'
               })
             }
-            this._getTeachers()
+            const data = {
+              campus: this.campusVal ? this.campusVal : '',
+              pagesize: 10,
+              pagenum: this.pagenum
+            }
+            this._getTeachers(data)
           })
         }).catch(() => {})
       }

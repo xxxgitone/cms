@@ -170,6 +170,7 @@
           layout="total, prev, pager, next" 
           :total="total"
           @current-change="handleCurrentChange"
+          :current-page.sync="currentPage"
         ></el-pagination>
       </el-col>
     </el-row>
@@ -180,8 +181,10 @@
 import {OK_CODE, ERR_CODE} from 'api/config'
 import {getUsers, addUser, editUser, deleteUser} from 'api/user'
 import {setEmptyString, getIds} from 'common/js/utils'
+import {managePageMixin} from 'common/js/mixin'
 
 export default {
+  mixins: [managePageMixin],
   data () {
     return {
       options: [
@@ -219,7 +222,6 @@ export default {
       campusVal: '',
       query: '',
       users: [],
-      dialogVisible: false,
       userInfo: {
         account: '',
         userName: '',
@@ -262,6 +264,7 @@ export default {
       loading: false,
       dataLoading: true,
       operationType: 'add',
+      currentPage: 1,
       multipleSelection: [],
       editable: false,
       pagenum: 1,
@@ -287,12 +290,6 @@ export default {
     this._getUsers()
   },
   methods: {
-    dialogShow () {
-      this.dialogVisible = true
-    },
-    dialogHide () {
-      this.dialogVisible = false
-    },
     formatRole (role) {
       if (role === 'admin') {
         return '管理员'
@@ -304,11 +301,9 @@ export default {
       this.multipleSelection = val
     },
     handleCurrentChange (val) {
-      if (this.campusVal) {
-        return
-      }
       this.pagenum = val
       const data = {
+        campus: this.campusVal ? this.campusVal : '',
         pagesize: 10,
         pagenum: this.pagenum
       }
@@ -320,6 +315,7 @@ export default {
       this._getUsers(data)
       if (!val) {
         this._getUsers()
+        this.currentPage = 1
       }
     },
     handleClose () {
@@ -352,6 +348,8 @@ export default {
               })
               this.handleClose()
               this._getUsers()
+              this.currentPage = 1
+              this.campusVal = ''
             } else if (res.code === ERR_CODE) {
               this.$message({
                 showClose: true,
@@ -383,7 +381,12 @@ export default {
             type: 'success'
           })
           this.handleClose()
-          this._getUsers()
+          const data = {
+            campus: this.campusVal ? this.campusVal : '',
+            pagesize: 10,
+            pagenum: this.pagenum
+          }
+          this._getUsers(data)
         } else if (res.code === ERR_CODE) {
           this.$message({
             showClose: true,
@@ -406,7 +409,12 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this._getUsers()
+            const data = {
+              campus: this.campusVal ? this.campusVal : '',
+              pagesize: 10,
+              pagenum: this.pagenum
+            }
+            this._getUsers(data)
           }
         })
       }).catch(() => {
@@ -434,7 +442,12 @@ export default {
                 type: 'success'
               })
             }
-            this._getUsers()
+            const data = {
+              campus: this.campusVal ? this.campusVal : '',
+              pagesize: 10,
+              pagenum: this.pagenum
+            }
+            this._getUsers(data)
           })
         }).catch(() => {})
       }
