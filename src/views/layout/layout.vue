@@ -5,7 +5,7 @@
         <span class="title-text">{{"艺术学校(" + campus.substr(0, 2) + ")校区"}}</span>
       </h1> 
       <h1 class="title collapse-title" :class="{show: isCollapse}">
-        <span class="title-text">艺</span>
+        <img class="title-logo"src="../../common/img/cms.png">
       </h1>  
       <side-nav :isCollapse="isCollapse"></side-nav>
     </div>
@@ -117,6 +117,10 @@ export default {
     width: 0;
     transform: translateX(-110%);
   }
+  .title-logo {
+    width: 35px;
+    height: 35px;
+  }
   .collapse-title {
     width: auto;
     position: absolute;
@@ -146,6 +150,10 @@ export default {
       line-height: 60px;
       text-align: center;
       cursor: pointer;
+      transition: background .3s;
+      &:hover {
+        background: #C5DFF3;
+      }
     }
     .nav-bar {
       display: flex;
