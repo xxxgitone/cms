@@ -3,7 +3,9 @@ const jwt = require('jsonwebtoken')
 const config = require('../config/config')
 
 const fetchUsers = async (ctx) => {
-  const query = ctx.query.campus ? {campus: ctx.query.campus} : {}
+  const campus = ctx.query.campus ? {campus: ctx.query.campus} : {}
+  const userName = ctx.query.name ? {userName: {$regex: ctx.query.name, $options: 'g'}} : {}
+  const query = Object.assign(userName, campus)
   const pagenum = Number(ctx.query.pagenum) || 1
   const pagesize = Number(ctx.query.pagesize) || 10
   const total = await User.find(query).count()

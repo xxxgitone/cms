@@ -18,7 +18,7 @@
           ></el-option>
         </el-select>
         <el-input
-          placeholder="请输入关键字"
+          placeholder="输入姓名查询"
           icon="search"
           v-model="query"
           class="search"
@@ -180,7 +180,7 @@
 <script>
 import {OK_CODE, ERR_CODE} from 'api/config'
 import {getUsers, addUser, editUser, deleteUser} from 'api/user'
-import {setEmptyString, getIds} from 'common/js/utils'
+import {setEmptyString, getIds, debounce} from 'common/js/utils'
 import {managePageMixin} from 'common/js/mixin'
 
 export default {
@@ -288,6 +288,14 @@ export default {
   },
   created () {
     this._getUsers()
+    this.$watch('query', debounce((newQyery) => {
+      const data = {
+        campus: this.campusVal ? this.campusVal : '',
+        name: newQyery
+      }
+      console.log(data)
+      this._getUsers(data)
+    }, 200))
   },
   methods: {
     formatRole (role) {
