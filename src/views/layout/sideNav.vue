@@ -28,8 +28,8 @@
         <i class="el-icon-setting"></i> 
         <span slot="title">基础信息</span>
       </template> 
-      <el-menu-item index="user">用户管理</el-menu-item>
-      <el-menu-item index="teacher">教师管理</el-menu-item>
+      <el-menu-item index="user" route="/admin/user">用户管理</el-menu-item>
+      <el-menu-item index="teacher" route="/admin/teacher">教师管理</el-menu-item>
       <el-menu-item index="4-3">课程管理</el-menu-item>
       <el-menu-item index="4-4">校区管理</el-menu-item>
       <el-menu-item index="4-5">教师管理</el-menu-item>      

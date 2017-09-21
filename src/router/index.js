@@ -6,6 +6,7 @@ const UserManage = () => import('views/userManage/userManage')
 const Home = () => import('views/home/home')
 const Login = () => import('views/login/login')
 const TeacherManage = () => import('views/teacherManage/teacherManage')
+const Profile = () => import('views/profile/profile')
 
 Vue.use(Router)
 
@@ -20,9 +21,9 @@ export default new Router({
       component: Login
     },
     {
-      path: '/manage',
+      path: '/admin',
       component: Layout,
-      redirect: '/manage/home',
+      redirect: '/admin/home',
       children: [
         {
           path: 'home',
@@ -39,6 +40,12 @@ export default new Router({
           path: 'teacher',
           component: TeacherManage,
           name: ['基础数据', '教师管理'],
+          meta: {role: ['admin', 'front']}
+        },
+        {
+          path: 'teacher/:id',
+          compoent: Profile,
+          name: ['基础数据', '教师管理', '个人简介'],
           meta: {role: ['admin', 'front']}
         }
       ]

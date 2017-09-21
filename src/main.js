@@ -50,7 +50,7 @@ router.beforeEach((to, from, next) => {
   } else {
     if (store.getters.token) {
       NProgress.done()
-      next({path: '/manage'})
+      next({path: '/admin'})
     } else {
       NProgress.done()
       next()
