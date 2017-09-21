@@ -15,7 +15,11 @@ const TeacherSchema = new Schema({
     default: 'M'
   },
   job: String,
-  age: Number
+  rank: String,
+  feedback: [],
+  rate: String,
+  profile: String,
+  avatar: String
 })
 
 const Teacher = mongoose.model('Teacher', TeacherSchema)
