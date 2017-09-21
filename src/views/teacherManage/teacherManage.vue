@@ -134,8 +134,8 @@
       <el-table-column 
         label="年龄" 
         width="70" 
-        prop="age"
       >
+        <template scope="scope">{{ formatAge(scope.row.birthday) }}</template>
       </el-table-column>
       <el-table-column 
         label="生日" 
@@ -186,6 +186,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import {OK_CODE} from 'api/config'
 import {getTeachers, addTeacher, editTeacher, deleteTeacher} from 'api/teacher'
 import {setEmptyString, getIds} from 'common/js/utils'
@@ -302,6 +303,10 @@ export default {
       } else if (gender === 'M') {
         return '男'
       }
+    },
+    formatAge (birthday) {
+      const timestamp = Date.now() - +new Date(birthday)
+      return Math.floor(moment.duration(timestamp).asYears())
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
