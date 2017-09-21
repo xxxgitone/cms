@@ -114,6 +114,7 @@
     </el-row>
     <el-table
       v-loading.body="dataLoading"
+
       :data="teachers"
       border
       tooltip-effect="dark"
@@ -121,10 +122,24 @@
     >
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column 
+        label="头像" 
+        width="70" 
+        align="center"
+      >
+        <template scope="scope">
+          <img width="30" height="30" class="teacher-avatar" :src="scope.row.avatar">
+        </template>
+      </el-table-column>
+      <el-table-column 
         label="姓名" 
         width="100" 
-        prop="userName"
-      ></el-table-column>
+      >
+        <template scope="scope">
+          <router-link class="teacherLink" :to="`/admin/teacher/${scope.row._id}`">
+            {{scope.row.userName}}
+          </router-link>
+        </template>
+      </el-table-column>
       <el-table-column 
         label="性别" 
         width="70" 
@@ -136,11 +151,6 @@
         width="70" 
       >
         <template scope="scope">{{ formatAge(scope.row.birthday) }}</template>
-      </el-table-column>
-      <el-table-column 
-        label="生日" 
-      >
-        <template scope="scope">{{ scope.row.birthday | formatDate }}</template>
       </el-table-column>
       <el-table-column 
         label="电话号码" 
@@ -233,6 +243,7 @@ export default {
       currentPage: 1,
       teachers: [],
       teacherInfo: {
+        _id: '',
         userName: '',
         birthday: '',
         phoneNumber: '',
@@ -466,6 +477,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../common/scss/mixins.scss';
+
 .teacher-manage {
   .panel-header {
     display: flex;
@@ -485,6 +498,16 @@ export default {
   .pagination {
     margin: 16px 0 8px 0;
     text-align: right;
+  }
+  img.teacher-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    @include transformCenter;
+  }
+  .teacherLink {
+    text-decoration: none;
   }
 }
 </style>
