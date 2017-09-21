@@ -22,3 +22,17 @@ export const getIds = (arr) => {
   })
   return _ids
 }
+
+export const debounce = (func, wait) => {
+  let timer
+
+  return (...args) => {
+    if (timer) {
+      clearTimeout(timer)
+    }
+
+    timer = setTimeout(() => {
+      func.apply(this, args)
+    }, wait)
+  }
+}
