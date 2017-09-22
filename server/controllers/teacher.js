@@ -15,6 +15,15 @@ const fetchTeachers = async (ctx) => {
   }
 }
 
+const fetchTeacherById = async (ctx) => {
+  const _id = ctx.query._id
+  const teacher = await Teacher.findOne({_id: _id})
+  ctx.body = {
+    code: 0,
+    teacher: teacher
+  }
+}
+
 const addTeacher = async (ctx) => {
   const teacher = ctx.request.body
   const data = await Teacher.create(teacher)
@@ -63,5 +72,6 @@ module.exports = {
   fetchTeachers,
   addTeacher,
   updateTeacher,
-  deleteTeacher
+  deleteTeacher,
+  fetchTeacherById
 }

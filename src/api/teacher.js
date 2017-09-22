@@ -10,6 +10,14 @@ export const getTeachers = (data) => {
   })
 }
 
+export const getTeacherById = (id) => {
+  let url = '/api/teacher'
+  return axios.get(`${url}?_id=${id}`)
+  .then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
 export const addTeacher = (teacher) => {
   const url = '/api/teachers'
   return axios.post(url, teacher)
