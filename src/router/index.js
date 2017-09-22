@@ -5,7 +5,8 @@ const Layout = () => import('views/layout/layout')
 const UserManage = () => import('views/userManage/userManage')
 const Home = () => import('views/home/home')
 const Login = () => import('views/login/login')
-const TeacherManage = () => import('views/teacherManage/teacherManage')
+const TeacherManage = () => import('views/teacher/teacherManage')
+const TeacherEdit = () => import('views/teacher/teacherEdit')
 const Profile = () => import('views/profile/profile')
 
 Vue.use(Router)
@@ -44,8 +45,20 @@ export default new Router({
         },
         {
           path: 'teacher/:id',
-          compoent: Profile,
+          component: Profile,
           name: ['基础数据', '教师管理', '个人简介'],
+          meta: {role: ['admin', 'front']}
+        },
+        {
+          path: 'teacher/info/add',
+          component: TeacherEdit,
+          name: ['基础数据', '教师管理', '添加教师'],
+          meta: {role: ['admin', 'front']}
+        },
+        {
+          path: 'teacher/edit/:id',
+          component: TeacherEdit,
+          name: ['基础数据', '教师管理', '修改信息'],
           meta: {role: ['admin', 'front']}
         }
       ]
