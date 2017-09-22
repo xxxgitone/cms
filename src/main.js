@@ -20,6 +20,12 @@ Vue.filter('formatDate', timestamp => {
   return moment(timestamp).format('L')
 })
 
+Vue.filter('formatAge', birthday => {
+  const timestamp = Date.now() - +new Date(birthday)
+  let age = Math.floor(moment.duration(timestamp).asYears())
+  return age === 0 ? 1 : age
+})
+
 Vue.use(ElementUI)
 Vue.component('i-svg', ISvg)
 
