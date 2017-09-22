@@ -25,92 +25,8 @@
         ></el-input>
       </el-col>
       <el-col :span="4" class="add">
-        <el-button type="primary" icon="plus" @click="handleAdd">添加教师</el-button>
+        <el-button type="primary" icon="plus" @click="handleAdd()">添加教师</el-button>
       </el-col>
-      <el-dialog
-        :title="title"
-        :visible.sync="dialogVisible"
-        label-position="right"
-        size="tiny"
-        :before-close="handleClose"
-      >
-        <el-form :model="teacherInfo" ref="form" :rules="rules" label-width="80px">
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="姓名" prop="userName">
-                <el-input v-model="teacherInfo.userName" placeholder="姓名"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="年龄" prop="age">
-                <el-input v-model="teacherInfo.age" placeholder="年龄"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-form-item label="出生年月" prop="birthday">
-            <el-date-picker 
-              v-model="teacherInfo.birthday"
-              type="date"
-              placeholder="选择日期"
-              :picker-options="pickerOptions"
-              :editable="editable"
-            >
-            </el-date-picker>
-          </el-form-item>
-          <el-form-item label="性别" prop="gender">
-            <el-radio v-model="teacherInfo.gender" label="M">男</el-radio>
-            <el-radio v-model="teacherInfo.gender" label="F">女</el-radio>            
-          </el-form-item>
-          <el-form-item label="电话号码" prop="phoneNumber">
-            <el-input v-model.number="teacherInfo.phoneNumber" placeholder="请输入电话号码"></el-input>
-          </el-form-item>
-          <el-form-item label="入职日期" prop="entryDate">
-            <el-date-picker 
-              v-model="teacherInfo.entryDate"
-              type="date"
-              placeholder="选择日期"
-              :editable="editable"
-              :picker-options="pickerOptions"
-            >
-            </el-date-picker>
-          </el-form-item>
-          <el-form-item label="所任课程" prop="job">
-            <el-select v-model="teacherInfo.job" clearable placeholder="请选择所任课程">
-              <el-option 
-                v-for="item in jobOptions" 
-                :key="item.value" 
-                :label="item.label" 
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="所属校区" prop="campus">
-            <el-select v-model="teacherInfo.campus" clearable placeholder="请选择校区">
-              <el-option 
-                v-for="item in options" 
-                :key="item.value" 
-                :label="item.label" 
-                :value="item.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-form>
-        <div slot="footer">
-          <el-button @click="handleClose">取消</el-button>
-          <el-button 
-            v-show="operationType==='add'" 
-            type="primary" 
-            @click="addConfirm" 
-            :loading="loading"
-          >确定</el-button>
-          <el-button 
-            v-show="operationType==='edit'"
-            type="primary" 
-            @click="editConfirm" 
-            :loading="loading"
-          >确定</el-button>
-        </div>
-      </el-dialog>
     </el-row>
     <el-table
       v-loading.body="dataLoading"
@@ -197,12 +113,10 @@
 
 <script>
 import {OK_CODE} from 'api/config'
-import {getTeachers, addTeacher, editTeacher, deleteTeacher} from 'api/teacher'
-import {setEmptyString, getIds} from 'common/js/utils'
-import {managePageMixin} from 'common/js/mixin'
+import {getTeachers, deleteTeacher} from 'api/teacher'
+import {getIds} from 'common/js/utils'
 
 export default {
-  mixins: [managePageMixin],
   data () {
     return {
       options: [
@@ -227,16 +141,6 @@ export default {
           label: '华泾校区'
         }
       ],
-      jobOptions: [
-        {
-          value: '美术老师',
-          label: '美术老师'
-        },
-        {
-          value: '中国舞',
-          label: '中国舞'
-        }
-      ],
       campusVal: '',
       query: '',
       currentPage: 1,
@@ -252,55 +156,12 @@ export default {
         job: '',
         age: ''
       },
-      rules: {
-        userName: [
-          {required: true, message: '请输入姓名', trigger: 'blur'}
-        ],
-        age: [
-          {required: true, message: '请输入年龄', trigger: 'blur'}
-        ],
-        birthday: [
-          {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
-        ],
-        gender: [
-          {required: true, message: '请选择性别'}
-        ],
-        phoneNumber: [
-          {required: true, message: '请输入电话号码'},
-          {type: 'number', message: '请输入正确的电话号码'}
-        ],
-        entryDate: [
-          {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
-        ],
-        job: [
-          {required: true, message: '请选择所任课程', trigger: 'change'}
-        ],
-        campus: [
-          {required: true, message: '请选择校区', trigger: 'change'}
-        ]
-      },
       loading: false,
       dataLoading: true,
-      operationType: 'add',
       multipleSelection: [],
-      editable: false,
       pagenum: 1,
       pagesize: 10,
-      total: 0,
-      pickerOptions: {
-        disabledDate (time) {
-          return time.getTime() > Date.now() - 8.64e7
-        }
-      }
-    }
-  },
-  computed: {
-    title () {
-      if (this.operationType === 'add') {
-        return '添加教师'
-      } else if (this.operationType === 'edit') {
-        return '修改教师'
-      }
+      total: 0
     }
   },
   created () {
@@ -335,71 +196,11 @@ export default {
         this.currentPage = 1
       }
     },
-    handleClose () {
-      this.$refs.form.resetFields()
-      setEmptyString(this.teacherInfo)
-      this.dialogHide()
-    },
-    handleAdd () {
-      this.operationType = 'add'
-      setEmptyString(this.teacherInfo)
-      this.dialogShow()
-    },
-    addConfirm () {
-      this.loading = true
-      const teacherInfo = this.teacherInfo
-      this.$refs.form.validate((valid) => {
-        if (valid) {
-          // 添加，修改公用一套数据模板，当点击过修改后，在去点击添加，会存在'_id'和'_v'字段
-          if (teacherInfo.hasOwnProperty('_id')) {
-            delete teacherInfo._id
-            delete teacherInfo._v
-          }
-          addTeacher(teacherInfo).then((res) => {
-            this.loading = false
-            if (res.code === OK_CODE) {
-              this.$message({
-                showClose: true,
-                message: '添加成功',
-                type: 'success'
-              })
-              this.handleClose()
-              this._getTeachers()
-              this.currentPage = 1
-              this.campusVal = ''
-            }
-          })
-        } else {
-          this.loading = false
-          return false
-        }
-      })
+    handleAdd (id) {
+      this.$router.push(`/admin/teacher/info/add`)
     },
     handleEdit (index, row) {
-      this.operationType = 'edit'
-      this.teacherInfo = Object.assign({}, row)
-      this.dialogShow()
-    },
-    editConfirm () {
-      this.loading = true
-      const teacherInfo = this.teacherInfo
-      editTeacher(teacherInfo).then((res) => {
-        this.loading = false
-        if (res.code === OK_CODE) {
-          this.$message({
-            showClose: true,
-            message: res.msg,
-            type: 'success'
-          })
-          this.handleClose()
-          const data = {
-            campus: this.campusVal ? this.campusVal : '',
-            pagesize: 10,
-            pagenum: this.pagenum
-          }
-          this._getTeachers(data)
-        }
-      })
+      this.$router.push(`/admin/teacher/edit/${row._id}`)
     },
     handleDelete (index, row) {
       this.$confirm('此操作将永久删除该数据，是否继续？', '提示', {
