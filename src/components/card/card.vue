@@ -24,7 +24,7 @@ export default {
 
 .card {
   .card-title {
-    background: $color-text-dark-white;
+    background: $color-bg-dark-white;
     color: $color-text-light-black;
     padding: 16px;
     border-top-left-radius: 8px;
@@ -32,7 +32,7 @@ export default {
     @include boxShadow;
   }
   .card-body {
-    border: 1px solid $color-text-dark-white;
+    border: 1px solid $color-bg-dark-white;
     padding: 16px;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
