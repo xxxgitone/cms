@@ -3,26 +3,10 @@
     <el-row class="panel-header">
       <el-col :span="20">
         <el-button type="danger" icon="delete" @click="deleteSelection">批量删除</el-button>
-        <el-select 
-          v-model="campusVal" 
-          clearable 
-          placeholder="请选择校区" 
-          class="campus" 
-          @change="handleChange"
-        >
-          <el-option 
-            v-for="item in options" 
-            :key="item.value" 
-            :label="item.label" 
-            :value="item.value"
-          ></el-option>
-        </el-select>
-        <el-input
-          placeholder="输入姓名查询"
-          icon="search"
-          v-model="query"
-          class="search"
-        ></el-input>
+        <search-boxs 
+          @handleChange="handleChange" 
+          @query="searchByQuery"
+        ></search-boxs>
       </el-col>
       <el-col :span="4" class="add">
         <el-button type="primary" icon="plus" @click="handleAdd">添加用户</el-button>
@@ -180,8 +164,9 @@
 <script>
 import {OK_CODE, ERR_CODE} from 'api/config'
 import {getUsers, addUser, editUser, deleteUser} from 'api/user'
-import {setEmptyString, getIds, debounce} from 'common/js/utils'
+import {setEmptyString, getIds} from 'common/js/utils'
 import {managePageMixin} from 'common/js/mixin'
+import SearchBoxs from 'components/search-boxs/search-boxs'
 
 export default {
   mixins: [managePageMixin],
@@ -288,14 +273,6 @@ export default {
   },
   created () {
     this._getUsers()
-    this.$watch('query', debounce((newQyery) => {
-      const data = {
-        campus: this.campusVal ? this.campusVal : '',
-        name: newQyery
-      }
-      console.log(data)
-      this._getUsers(data)
-    }, 200))
   },
   methods: {
     formatRole (role) {
@@ -304,6 +281,13 @@ export default {
       } else if (role === 'front') {
         return '校区前台'
       }
+    },
+    searchByQuery (newQyery) {
+      const data = {
+        campus: this.campusVal ? this.campusVal : '',
+        name: newQyery
+      }
+      this._getUsers(data)
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
@@ -470,6 +454,9 @@ export default {
         }
       })
     }
+  },
+  components: {
+    SearchBoxs
   }
 }
 </script>
@@ -479,13 +466,8 @@ export default {
   .panel-header {
     display: flex;
     margin-bottom: 24px;
-    .campus {
-      margin-left: 8px;
-      width: 120px;
-      margin-right: 8px;
-    }
-    .search {
-      width: 220px;
+    .el-col:nth-child(1) {
+      display: flex;
     }
     .add {
       text-align: right;

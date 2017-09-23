@@ -3,26 +3,10 @@
     <el-row class="panel-header">
       <el-col :span="20">
         <el-button type="danger" icon="delete" @click="deleteSelection">批量删除</el-button>
-        <el-select 
-          v-model="campusVal" 
-          clearable 
-          placeholder="请选择校区" 
-          class="campus" 
-          @change="handleChange"
-        >
-          <el-option 
-            v-for="item in options" 
-            :key="item.value" 
-            :label="item.label" 
-            :value="item.value"
-          ></el-option>
-        </el-select>
-        <el-input
-          placeholder="请输入关键字"
-          icon="search"
-          v-model="query"
-          class="search"
-        ></el-input>
+        <search-boxs 
+          @handleChange="handleChange" 
+          @query="searchByQuery"
+        ></search-boxs>
       </el-col>
       <el-col :span="4" class="add">
         <el-button type="primary" icon="plus" @click="handleAdd()">添加教师</el-button>
@@ -115,6 +99,7 @@
 import {OK_CODE} from 'api/config'
 import {getTeachers, deleteTeacher} from 'api/teacher'
 import {getIds} from 'common/js/utils'
+import SearchBoxs from 'components/search-boxs/search-boxs'
 
 export default {
   data () {
@@ -174,6 +159,13 @@ export default {
       } else if (gender === 'M') {
         return '男'
       }
+    },
+    searchByQuery (newQyery) {
+      const data = {
+        campus: this.campusVal ? this.campusVal : '',
+        name: newQyery
+      }
+      this._getTeachers(data)
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
@@ -268,6 +260,9 @@ export default {
         }
       })
     }
+  },
+  components: {
+    SearchBoxs
   }
 }
 </script>
@@ -279,13 +274,8 @@ export default {
   .panel-header {
     display: flex;
     margin-bottom: 24px;
-    .campus {
-      margin-left: 8px;
-      width: 120px;
-      margin-right: 8px;
-    }
-    .search {
-      width: 220px;
+    .el-col:nth-child(1) {
+      display: flex;
     }
     .add {
       text-align: right;
