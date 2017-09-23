@@ -31,7 +31,7 @@
       <el-menu-item index="user" :route="{path: '/admin/user'}">用户管理</el-menu-item>
       <el-menu-item index="teacher" :route="{path: '/admin/teacher'}">教师管理</el-menu-item>
       <el-menu-item index="4-3">课程管理</el-menu-item>
-      <el-menu-item index="4-4">校区管理</el-menu-item>
+      <el-menu-item index="campus" :route="{path: '/admin/campus'}">校区管理</el-menu-item>
       <el-menu-item index="4-5">教师管理</el-menu-item>      
     </el-submenu>
   </el-menu>
