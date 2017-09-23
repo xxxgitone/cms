@@ -7,6 +7,9 @@ const router = require('koa-router')()
 const mongoose = require('mongoose')
 const userRoutes = require('./server/router/user')
 const teacherRoutes = require('./server/router/teacher')
+const campusRoutes = require('./server/router/campus')
+// const axios = require('axios')
+// const Campus = require('./server/models/campus')
 
 const PORT = process.env.PORT || '3000'
 const ENV = process.env.NODE_ENV || 'development'
@@ -22,6 +25,12 @@ app.use(logger())
 app.use(bodyParser())
 app.use(json())
 
+// axios.get('https://www.easy-mock.com/mock/59c35a9fe0dc663341b2ec0c/api/campus').then((res) => {
+//   res.data.data.forEach(item => {
+//     Campus.create(item)
+//   })
+// })
+
 app.use(async (ctx, next) => {
   const start = new Date()
   await next()
@@ -36,6 +45,7 @@ app.on('error', (err, ctx) => {
 app.use(require('./server/middlewares/jwtMiddle'))
 router.use('/api', userRoutes.routes())
 router.use('/api', teacherRoutes.routes())
+router.use('/api', campusRoutes.routes())
 
 app
   .use(router.routes())
