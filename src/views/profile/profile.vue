@@ -26,6 +26,10 @@
         <el-col :span="16">{{teacher.birthday | formatAge}}</el-col>
       </el-row>
       <el-row>
+        <el-col :span="8">所属校区</el-col>
+        <el-col :span="16">{{teacher.campus}}</el-col>
+      </el-row>
+      <el-row>
         <el-col :span="8">出生日期</el-col>
         <el-col :span="16">{{teacher.birthday | formatDate}}</el-col>
       </el-row>
