@@ -1,7 +1,9 @@
 const Teacher = require('../models/teacher')
 
 const fetchTeachers = async (ctx) => {
-  const query = ctx.query.campus ? {campus: ctx.query.campus} : {}
+  const campus = ctx.query.campus ? {campus: ctx.query.campus} : {}
+  const userName = ctx.query.name ? {userName: {$regex: ctx.query.name, $options: 'g'}} : {}
+  const query = Object.assign(userName, campus)
   const pagenum = Number(ctx.query.pagenum) || 1
   const pagesize = Number(ctx.query.pagesize) || 10
   const total = await Teacher.find(query).count()
