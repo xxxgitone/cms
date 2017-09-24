@@ -1,5 +1,5 @@
 <template>
-  <svg class="icon" aria-hidden="true" @click="select">
+  <svg class="icon" aria-hidden="true" @click="select" :style="iStyle">
       <use :xlink:href="iconName"></use>
   </svg>
 </template>
@@ -10,6 +10,9 @@ export default {
     icon: {
       type: String,
       default: ''
+    },
+    iStyle: {
+      type: Object
     }
   },
   computed: {
