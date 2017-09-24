@@ -9,7 +9,7 @@
       <p class="profile-motto">不为失败找借口不为失败找借口不为失败找借口不为失败找借口不为失败找借口</p>
       <p class="profile-rank">
         <span>
-          <i-svg icon="jinpai"></i-svg>
+          <i-svg icon="jinpai" :i-style="{'margin-right': '0', height: '16px'}"></i-svg>
           {{teacher.rank}}
         </span>
         <span>|</span>
