@@ -1,19 +1,19 @@
 <template>
   <div class="course-list">
-    <el-card :body-style="{ padding: '0px' }">
+    <el-card :body-style="{ padding: '0px' }" v-for="item in data" :key="item._id">
       <img src="http://px.thea.cn/Public/Upload/2687389/Intro/1458272781.png">
       <div class="course-info">
         <el-row class="course-info-top">
-          <el-col :span="18" class="course-title">钢琴一级</el-col>
+          <el-col :span="18" class="course-title">{{item.courseName}}</el-col>
           <el-col :span="6">
             <i-svg icon="seeuser" :i-style="{'margin-right': '0'}"></i-svg>
             <span class="student-num">55</span>
           </el-col>
         </el-row>
         <el-row class="course-info-bottom">
-          <el-col :span="18" class="course-campus">九亭校区</el-col>
+          <el-col :span="18" class="course-campus">{{item.campus}}</el-col>
           <el-col :span="6">
-            <span class="course-teacher">龙秀英</span>
+            <span class="course-teacher">{{item.teacher}}</span>
           </el-col>
         </el-row>
       </div>
@@ -30,6 +30,7 @@
 import ISvg from 'components/i-svg/i-svg'
 
 export default {
+  props: ['data'],
   components: {
     ISvg
   }
