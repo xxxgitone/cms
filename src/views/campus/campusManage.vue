@@ -70,7 +70,7 @@
       </div>
     </el-dialog>
     <span class="add" @click="handleAdd">
-      <i class="el-icon-plus" @click="handleAdd"></i>
+      <i class="el-icon-plus"></i>
     </span>
   </div>
 </template>
