@@ -17,7 +17,7 @@ const TeacherSchema = new Schema({
   job: String,
   rank: String,
   feedback: [],
-  rate: String,
+  rate: Number,
   profile: String,
   avatar: String
 })
