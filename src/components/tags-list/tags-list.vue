@@ -1,16 +1,13 @@
 <template>
   <ul class="tags">
-    <li class="current">美术</li>
-    <li>美术</li>
-    <li>中国舞</li>
-    <li>武术</li>
-    <li>钢琴</li>
+    <li class="current">全部</li>
+    <li v-for="(item, index) in data" :key="index">{{item}}</li>
   </ul>
 </template>
 
 <script>
 export default {
-
+  props: ['data']
 }
 </script>
 
@@ -27,11 +24,11 @@ export default {
   display: flex;
   li {
     cursor: pointer;
-    padding: 0 4px;
+    padding: 2px 4px;
     margin-right: 8px;
     border-radius: 4px;
     &:hover {
-      color: #13CE66;
+      color: $color-bg-blue;
     }
     &.current {
       background: $color-bg-blue;
