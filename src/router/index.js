@@ -10,6 +10,7 @@ const TeacherEdit = () => import('views/teacher/teacherEdit')
 const Profile = () => import('views/profile/profile')
 const Campus = () => import('views/campus/campusManage')
 const CourseManage = () => import('views/course/courseManage')
+const CourseEdit = () => import('views/course/courseEdit')
 
 Vue.use(Router)
 
@@ -73,6 +74,12 @@ export default new Router({
           path: 'course',
           component: CourseManage,
           name: ['基础数据', '课程管理'],
+          meta: {role: ['admin', 'front']}
+        },
+        {
+          path: 'course/info/add',
+          component: CourseEdit,
+          name: ['基础数据', '课程管理', '添加课程'],
           meta: {role: ['admin', 'front']}
         }
       ]
