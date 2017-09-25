@@ -13,7 +13,7 @@
       <div class="head-nav">
         <el-row>
           <el-col :span="1" class="collapse-icon">
-            <i-svg :icon="iconName" @select="switchCollapse"></i-svg>
+            <i-svg :icon="iconName" @clicked="switchCollapse"></i-svg>
           </el-col>
           <el-col :span="22" class="nav-bar">
             <head-nav></head-nav>
