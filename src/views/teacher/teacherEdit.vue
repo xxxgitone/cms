@@ -209,7 +209,6 @@ export default {
       this.$router.push('/admin/teacher')
     },
     addConfirm () {
-      console.log(this.teacherInfo)
       this.loading = true
       const teacherInfo = this.teacherInfo
       this.$refs.form.validate((valid) => {
