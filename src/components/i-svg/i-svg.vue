@@ -1,5 +1,5 @@
 <template>
-  <svg class="icon" aria-hidden="true" @click="select" :style="iStyle">
+  <svg class="icon" aria-hidden="true" @click="clicked" :style="iStyle">
       <use :xlink:href="iconName"></use>
   </svg>
 </template>
@@ -21,8 +21,8 @@ export default {
     }
   },
   methods: {
-    select () {
-      this.$emit('select')
+    clicked () {
+      this.$emit('clicked')
     }
   }
 }
