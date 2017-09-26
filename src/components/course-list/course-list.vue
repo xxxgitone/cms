@@ -18,9 +18,9 @@
         </el-row>
       </div>
       <div class="tool-mask">  
-        <i-svg icon="edit" :i-style="{width: '45px', height: '22px'}"></i-svg>
+        <i-svg icon="edit" :i-style="{width: '45px', height: '22px'}" @clicked="edit(item)"></i-svg>
         <i-svg icon="eye" :i-style="{width: '45px', height: '22px'}"></i-svg>
-        <i-svg icon="delete" :i-style="{width: '45px', height: '22px'}"></i-svg>     
+        <i-svg icon="delete" :i-style="{width: '45px', height: '22px'}" @clicked="deleted(item)"></i-svg>     
       </div>
     </el-card>
   </div>
@@ -31,6 +31,14 @@ import ISvg from 'components/i-svg/i-svg'
 
 export default {
   props: ['data'],
+  methods: {
+    edit (item) {
+      this.$emit('edit', item)
+    },
+    deleted (item) {
+      this.$emit('deleted', item)
+    }
+  },
   components: {
     ISvg
   }
