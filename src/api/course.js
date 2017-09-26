@@ -1,8 +1,18 @@
 import axios from 'common/js/axiosServer'
+import {param} from 'common/js/utils'
 
-export const getCourses = () => {
+export const getCourses = (data) => {
   let url = '/api/courses'
+  url += url.indexOf('?') ? '?' + param(data) : ''
   return axios.get(url)
+  .then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+export const getCourseById = (id) => {
+  let url = '/api/course'
+  return axios.get(`${url}?_id=${id}`)
   .then((res) => {
     return Promise.resolve(res.data)
   })
