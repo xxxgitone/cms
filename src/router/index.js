@@ -81,6 +81,12 @@ export default new Router({
           component: CourseEdit,
           name: ['基础数据', '课程管理', '添加课程'],
           meta: {role: ['admin', 'front']}
+        },
+        {
+          path: 'course/edit/:id',
+          component: CourseEdit,
+          name: ['基础数据', '课程管理', '修改课程'],
+          meta: {role: ['admin', 'front']}
         }
       ]
     }
