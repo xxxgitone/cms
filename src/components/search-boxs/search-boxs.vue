@@ -15,7 +15,7 @@
       ></el-option>
     </el-select>
     <el-input
-      placeholder="输入姓名查询"
+      :placeholder="placeholder"
       icon="search"
       v-model="query"
       class="search"
@@ -27,6 +27,12 @@
 import {debounce} from 'common/js/utils'
 
 export default {
+  props: {
+    placeholder: {
+      type: String,
+      default: '请输入名字查询'
+    }
+  },
   data () {
     return {
       options: [
