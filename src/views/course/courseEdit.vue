@@ -94,6 +94,9 @@
 </template>
 
 <script>
+import {addCourse, editCourse, getCourseById} from 'api/course'
+import {OK_CODE} from 'api/config'
+
 export default {
   data () {
     return {
@@ -202,13 +205,60 @@ export default {
       }
     }
   },
+  created () {
+    const id = this.$route.params.id
+    if (id) {
+      this.operationType = 'edit'
+      this._getCourseById(id)
+    }
+  },
   methods: {
     handleCancel () {
       this.$router.push('/admin/course')
     },
     addConfirm () {
+      this.loading = true
+      const courseInfo = this.courseInfo
+      this.$refs.form.validate((valid) => {
+        if (valid) {
+          addCourse(courseInfo).then((res) => {
+            this.loading = false
+            if (res.code === OK_CODE) {
+              this.$message({
+                showClose: true,
+                message: '添加成功',
+                type: 'success'
+              })
+              this.$router.push(`/admin/course`)
+            }
+          })
+        } else {
+          this.loading = false
+          return false
+        }
+      })
     },
     editConfirm () {
+      this.loading = true
+      const courseInfo = this.courseInfo
+      editCourse(courseInfo).then((res) => {
+        this.loading = false
+        if (res.code === OK_CODE) {
+          this.$message({
+            showClose: true,
+            message: res.msg,
+            type: 'success'
+          })
+          this.$router.push(`/admin/course`)
+        }
+      })
+    },
+    _getCourseById (id) {
+      getCourseById(id).then((res) => {
+        if (res.code === OK_CODE) {
+          this.courseInfo = res.course
+        }
+      })
     }
   }
 }
