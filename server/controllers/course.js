@@ -1,12 +1,29 @@
 const Course = require('../models/course')
 
 const fetchCourse = async (ctx) => {
-  const course = await Course.find()
-  const tags = await Course.distinct('tag')
+  const query = ctx.query
+  const campus = query.campus ? {campus: query.campus} : {}
+  const courseName = query.courseName ? {courseName: {$regex: query.courseName, $options: 'g'}} : {}
+  const tag = query.tag ? {tag: query.tag} : {}
+  const searchQuery = Object.assign(courseName, campus, tag)
+  const pagenum = Number(query.pagenum) || 1
+  const pagesize = Number(query.pagesize) || 16
+  const [
+    total,
+    tags,
+    course
+  ] = await Promise.all([
+    Course.find(searchQuery).count(),
+    Course.distinct('tag'),
+    Course.find(searchQuery)
+      .skip((pagenum - 1) * pagesize)
+      .limit(pagesize)
+  ])
   ctx.body = {
     code: 0,
     course,
-    tags
+    tags,
+    total
   }
 }
 
