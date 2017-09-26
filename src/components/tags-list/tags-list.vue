@@ -1,13 +1,27 @@
 <template>
   <ul class="tags">
-    <li class="current">全部</li>
-    <li v-for="(item, index) in data" :key="index">{{item}}</li>
+    <li v-for="(item, index) in data" 
+      :key="index" 
+      @click="clicked(item, index)" 
+      :class="{ current: index === current }"
+    >{{item}}</li>
   </ul>
 </template>
 
 <script>
 export default {
-  props: ['data']
+  props: ['data'],
+  data () {
+    return {
+      current: 0
+    }
+  },
+  methods: {
+    clicked (item, index) {
+      this.current = index
+      this.$emit('clicked', item)
+    }
+  }
 }
 </script>
 
