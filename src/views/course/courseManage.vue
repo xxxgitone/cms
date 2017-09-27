@@ -106,7 +106,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            this._getCourses()
+            this._getCoursesByQuery()
           }
         })
       }).catch(() => {
