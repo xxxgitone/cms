@@ -19,8 +19,8 @@
       </div>
       <div class="tool-mask">  
         <i-svg icon="edit" :i-style="{width: '45px', height: '22px'}" @clicked="edit(item)"></i-svg>
-        <i-svg icon="eye" :i-style="{width: '45px', height: '22px'}"></i-svg>
-        <i-svg icon="delete" :i-style="{width: '45px', height: '22px'}" @clicked="deleted(item)"></i-svg>     
+        <i-svg icon="eye" :i-style="{width: '45px', height: '22px'}" @clicked="checked(item)"></i-svg>
+        <i-svg icon="delete" :i-style="{width: '45px', height: '22px'}" @clicked="deleted(item)"></i-svg>
       </div>
     </el-card>
   </div>
@@ -34,6 +34,9 @@ export default {
   methods: {
     edit (item) {
       this.$emit('edit', item)
+    },
+    checked (item) {
+      this.$emit('checked', item)
     },
     deleted (item) {
       this.$emit('deleted', item)

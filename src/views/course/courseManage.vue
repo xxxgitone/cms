@@ -13,6 +13,7 @@
       :data="courses" 
       @edit="handleEdit"
       @deleted="handleDelete"
+      @checked="handleCheck"
     ></course-list>
     <span class="add" @click="handleAdd">
       <i class="el-icon-plus"></i>
@@ -89,6 +90,9 @@ export default {
     handleEdit (item) {
       this.$router.push(`/admin/course/edit/${item._id}`)
     },
+    handleCheck (item) {
+      this.$router.push(`/admin/course/${item._id}`)
+    },
     handleDelete (item) {
       this.$confirm('此操作将永久删除该数据，是否继续？', '提示', {
         confirmButtonText: '确定',
@@ -128,7 +132,6 @@ export default {
         courseName,
         tag
       }
-      console.log(data)
       this.currentPage = Number(pagenum) || 1
       this._getCourses(data)
     }
