@@ -272,7 +272,7 @@ export default {
     }
   },
   created () {
-    this._getUsers()
+    this._getUsersByQuery()
   },
   methods: {
     formatRole (role) {
@@ -283,30 +283,23 @@ export default {
       }
     },
     searchByQuery (newQyery) {
-      const data = {
-        campus: this.campusVal ? this.campusVal : '',
-        name: newQyery
-      }
-      this._getUsers(data)
+      this.query = newQyery
+      this._getUsersByQuery()
+      this.currentPage = 1
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
     handleCurrentChange (val) {
       this.pagenum = val
-      const data = {
-        campus: this.campusVal ? this.campusVal : '',
-        pagesize: 10,
-        pagenum: this.pagenum
-      }
-      this._getUsers(data)
+      this.$router.push(`/admin/user?pagenum=${this.pagenum}`)
     },
     handleChange (val) {
       this.campusVal = val
-      const data = {campus: val}
-      this._getUsers(data)
+      this._getUsersByQuery()
+      this.currentPage = 1
       if (!val) {
-        this._getUsers()
+        this._getUsersByQuery()
         this.currentPage = 1
       }
     },
@@ -373,12 +366,13 @@ export default {
             type: 'success'
           })
           this.handleClose()
-          const data = {
-            campus: this.campusVal ? this.campusVal : '',
-            pagesize: 10,
-            pagenum: this.pagenum
-          }
-          this._getUsers(data)
+          // const data = {
+          //   campus: this.campusVal ? this.campusVal : '',
+          //   pagesize: 10,
+          //   pagenum: this.pagenum
+          // }
+          // this._getUsers(data)
+          this._getUsersByQuery()
         } else if (res.code === ERR_CODE) {
           this.$message({
             showClose: true,
@@ -401,12 +395,13 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            const data = {
-              campus: this.campusVal ? this.campusVal : '',
-              pagesize: 10,
-              pagenum: this.pagenum
-            }
-            this._getUsers(data)
+            // const data = {
+            //   campus: this.campusVal ? this.campusVal : '',
+            //   pagesize: 10,
+            //   pagenum: this.pagenum
+            // }
+            // this._getUsers(data)
+            this._getUsersByQuery()
           }
         })
       }).catch(() => {
@@ -434,12 +429,13 @@ export default {
                 type: 'success'
               })
             }
-            const data = {
-              campus: this.campusVal ? this.campusVal : '',
-              pagesize: 10,
-              pagenum: this.pagenum
-            }
-            this._getUsers(data)
+            // const data = {
+            //   campus: this.campusVal ? this.campusVal : '',
+            //   pagesize: 10,
+            //   pagenum: this.pagenum
+            // }
+            // this._getUsers(data)
+            this._getUsersByQuery()
           })
         }).catch(() => {})
       }
@@ -453,6 +449,24 @@ export default {
           this.users = res.users
         }
       })
+    },
+    _getUsersByQuery () {
+      const {pagenum} = this.$route.query
+      const campusVal = this.campusVal ? this.campusVal : ''
+      const userName = this.query ? this.query : ''
+      const data = {
+        pagenum,
+        campus: campusVal,
+        name: userName,
+        pagesize: 10
+      }
+      this.currentPage = Number(pagenum) || 1
+      this._getUsers(data)
+    }
+  },
+  watch: {
+    $route () {
+      this._getUsersByQuery()
     }
   },
   components: {

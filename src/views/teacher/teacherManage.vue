@@ -150,7 +150,7 @@ export default {
     }
   },
   created () {
-    this._getTeachers()
+    this._getTeachersByQuery()
   },
   methods: {
     formatGender (gender) {
@@ -161,30 +161,23 @@ export default {
       }
     },
     searchByQuery (newQyery) {
-      const data = {
-        campus: this.campusVal ? this.campusVal : '',
-        name: newQyery
-      }
-      this._getTeachers(data)
+      this.query = newQyery
+      this._getTeachersByQuery()
+      this.currentPage = 1
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
     },
     handleCurrentChange (val) {
       this.pagenum = val
-      const data = {
-        campus: this.campusVal ? this.campusVal : '',
-        pagesize: 10,
-        pagenum: this.pagenum
-      }
-      this._getTeachers(data)
+      this.$router.push(`/admin/teacher?pagenum=${this.pagenum}`)
     },
     handleChange (val) {
       this.campusVal = val
-      const data = {campus: val}
-      this._getTeachers(data)
+      this._getTeachersByQuery()
+      this.currentPage = 1
       if (!val) {
-        this._getTeachers()
+        this._getTeachersByQuery()
         this.currentPage = 1
       }
     },
@@ -207,12 +200,7 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            const data = {
-              campus: this.campusVal ? this.campusVal : '',
-              pagesize: 10,
-              pagenum: this.pagenum
-            }
-            this._getTeachers(data)
+            this._getTeachersByQuery()
           }
         })
       }).catch(() => {
@@ -240,12 +228,7 @@ export default {
                 type: 'success'
               })
             }
-            const data = {
-              campus: this.campusVal ? this.campusVal : '',
-              pagesize: 10,
-              pagenum: this.pagenum
-            }
-            this._getTeachers(data)
+            this._getTeachersByQuery()
           })
         }).catch(() => {})
       }
@@ -253,13 +236,30 @@ export default {
     _getTeachers (data) {
       this.dataLoading = true
       getTeachers(data).then((res) => {
+        console.log(res.teachers)
         this.dataLoading = false
         if (res.code === OK_CODE) {
           this.total = res.total
           this.teachers = res.teachers
         }
       })
+    },
+    _getTeachersByQuery () {
+      const {pagenum} = this.$route.query
+      const campusVal = this.campusVal ? this.campusVal : ''
+      const userName = this.query ? this.query : ''
+      const data = {
+        pagenum,
+        campus: campusVal,
+        userName
+      }
+      console.log(data)
+      this.currentPage = Number(pagenum) || 1
+      this._getTeachers(data)
     }
+  },
+  watch: {
+    '$route': '_getTeachersByQuery'
   },
   components: {
     SearchBoxs
