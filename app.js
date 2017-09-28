@@ -9,8 +9,9 @@ const userRoutes = require('./server/router/user')
 const teacherRoutes = require('./server/router/teacher')
 const campusRoutes = require('./server/router/campus')
 const courseRoutes = require('./server/router/course')
+const studentRoutes = require('./server/router/student')
 // const axios = require('axios')
-// const Course = require('./server/models/course')
+// const Student = require('./server/models/student')
 
 const PORT = process.env.PORT || '3000'
 const ENV = process.env.NODE_ENV || 'development'
@@ -26,10 +27,9 @@ app.use(logger())
 app.use(bodyParser())
 app.use(json())
 
-// axios.get('https://www.easy-mock.com/mock/59c35a9fe0dc663341b2ec0c/api/course').then((res) => {
+// axios.get('https://www.easy-mock.com/mock/59c35a9fe0dc663341b2ec0c/api/student').then((res) => {
 //   res.data.data.forEach(item => {
-//     console.log(item)
-//     Course.create(item)
+//     Student.create(item)
 //   })
 // })
 
@@ -49,6 +49,7 @@ router.use('/api', userRoutes.routes())
 router.use('/api', teacherRoutes.routes())
 router.use('/api', campusRoutes.routes())
 router.use('/api', courseRoutes.routes())
+router.use('/api', studentRoutes.routes())
 
 app
   .use(router.routes())
