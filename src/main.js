@@ -4,9 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
+import * as filters from './filters'
 import ElementUI from 'element-ui'
 import ISvg from 'components/i-svg/i-svg'
-import moment from 'moment'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
@@ -15,15 +15,9 @@ import 'element-ui/lib/theme-default/index.css'
 
 Vue.config.productionTip = false
 
-moment.locale('zh-cn')
-Vue.filter('formatDate', timestamp => {
-  return moment(timestamp).format('L')
-})
-
-Vue.filter('formatAge', birthday => {
-  const timestamp = Date.now() - +new Date(birthday)
-  let age = Math.floor(moment.duration(timestamp).asYears())
-  return age === 0 ? 1 : age
+// 注册全局过滤器
+Object.keys(filters).forEach((key) => {
+  Vue.filter(key, filters[key])
 })
 
 Vue.use(ElementUI)
