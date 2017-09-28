@@ -44,7 +44,7 @@
         label="性别" 
         width="70" 
       >
-        <template scope="scope">{{ formatGender(scope.row.gender) }}</template>
+        <template scope="scope">{{ scope.row.gender | formatGender }}</template>
       </el-table-column>
       <el-table-column 
         label="年龄" 
@@ -153,13 +153,6 @@ export default {
     this._getTeachersByQuery()
   },
   methods: {
-    formatGender (gender) {
-      if (gender === 'F') {
-        return '女'
-      } else if (gender === 'M') {
-        return '男'
-      }
-    },
     searchByQuery (newQyery) {
       this.query = newQyery
       this._getTeachersByQuery()
