@@ -12,6 +12,7 @@ const Campus = () => import('views/campus/campusManage')
 const CourseManage = () => import('views/course/courseManage')
 const CourseEdit = () => import('views/course/courseEdit')
 const CourseDetail = () => import('views/course/courseDetail')
+const StudentManage = () => import('views/student/studentManage')
 
 Vue.use(Router)
 
@@ -93,6 +94,12 @@ export default new Router({
           path: 'course/:id',
           component: CourseDetail,
           name: ['基础数据', '课程管理', '课程信息'],
+          meta: {role: ['admin', 'front']}
+        },
+        {
+          path: 'student',
+          component: StudentManage,
+          name: ['基础数据', '学员管理'],
           meta: {role: ['admin', 'front']}
         }
       ]

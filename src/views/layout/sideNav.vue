@@ -19,9 +19,9 @@
       <el-menu-item index="2-1">选项1</el-menu-item>
       <el-menu-item index="2-2">选项2</el-menu-item>
     </el-submenu>
-    <el-menu-item index="3">
+    <el-menu-item index="student" :route="{path: '/admin/student'}">
       <i class="el-icon-menu"></i>
-      <span slot="title">导航二</span>
+      <span slot="title">学员管理</span>
     </el-menu-item>
     <el-submenu index="4">
       <template slot="title">
