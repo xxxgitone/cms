@@ -366,12 +366,6 @@ export default {
             type: 'success'
           })
           this.handleClose()
-          // const data = {
-          //   campus: this.campusVal ? this.campusVal : '',
-          //   pagesize: 10,
-          //   pagenum: this.pagenum
-          // }
-          // this._getUsers(data)
           this._getUsersByQuery()
         } else if (res.code === ERR_CODE) {
           this.$message({
@@ -395,12 +389,6 @@ export default {
               message: res.msg,
               type: 'success'
             })
-            // const data = {
-            //   campus: this.campusVal ? this.campusVal : '',
-            //   pagesize: 10,
-            //   pagenum: this.pagenum
-            // }
-            // this._getUsers(data)
             this._getUsersByQuery()
           }
         })
@@ -429,12 +417,6 @@ export default {
                 type: 'success'
               })
             }
-            // const data = {
-            //   campus: this.campusVal ? this.campusVal : '',
-            //   pagesize: 10,
-            //   pagenum: this.pagenum
-            // }
-            // this._getUsers(data)
             this._getUsersByQuery()
           })
         }).catch(() => {})
