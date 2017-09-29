@@ -3,7 +3,7 @@ import {param} from 'common/js/utils'
 
 export const getCourses = (data) => {
   let url = '/api/courses'
-  url += url.indexOf('?') ? '?' + param(data) : ''
+  url += '?' + param(data)
   return axios.get(url)
   .then((res) => {
     return Promise.resolve(res.data)
