@@ -2,10 +2,10 @@
   <div class="student-manage">
     <el-row class="search-boxs">
       <el-button type="danger" icon="delete" @click="deleteSelection">批量删除</el-button>
-      <serach-boxs 
+      <search-boxs 
         @handleChange="handleChange" 
         @query="searchByQuery"
-      ></serach-boxs>
+      ></search-boxs>
     </el-row> 
     <el-table
       v-loading.body="dataLoading"
@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import SerachBoxs from 'components/search-boxs/search-boxs'
+import SearchBoxs from 'components/search-boxs/search-boxs'
 import {getStudents, deleteStudent} from 'api/student'
 import {OK_CODE} from 'api/config'
 import {getIds} from 'common/js/utils'
@@ -255,7 +255,7 @@ export default {
     }
   },
   components: {
-    SerachBoxs
+    SearchBoxs
   }
 }
 </script>
