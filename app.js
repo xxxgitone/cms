@@ -10,8 +10,9 @@ const teacherRoutes = require('./server/router/teacher')
 const campusRoutes = require('./server/router/campus')
 const courseRoutes = require('./server/router/course')
 const studentRoutes = require('./server/router/student')
+const orderRoutes = require('./server/router/order')
 // const axios = require('axios')
-// const Student = require('./server/models/student')
+// const Order = require('./server/models/order')
 
 const PORT = process.env.PORT || '3000'
 const ENV = process.env.NODE_ENV || 'development'
@@ -27,9 +28,9 @@ app.use(logger())
 app.use(bodyParser())
 app.use(json())
 
-// axios.get('https://www.easy-mock.com/mock/59c35a9fe0dc663341b2ec0c/api/student').then((res) => {
+// axios.get('https://www.easy-mock.com/mock/59c35a9fe0dc663341b2ec0c/api/order').then((res) => {
 //   res.data.data.forEach(item => {
-//     Student.create(item)
+//     Order.create(item)
 //   })
 // })
 
@@ -50,6 +51,7 @@ router.use('/api', teacherRoutes.routes())
 router.use('/api', campusRoutes.routes())
 router.use('/api', courseRoutes.routes())
 router.use('/api', studentRoutes.routes())
+router.use('/api', orderRoutes.routes())
 
 app
   .use(router.routes())

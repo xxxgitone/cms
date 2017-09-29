@@ -13,6 +13,7 @@ const CourseManage = () => import('views/course/courseManage')
 const CourseEdit = () => import('views/course/courseEdit')
 const CourseDetail = () => import('views/course/courseDetail')
 const StudentManage = () => import('views/student/studentManage')
+const OrderManage = () => import('views/order/orderManage')
 
 Vue.use(Router)
 
@@ -100,6 +101,12 @@ export default new Router({
           path: 'student',
           component: StudentManage,
           name: ['基础数据', '学员管理'],
+          meta: {role: ['admin', 'front']}
+        },
+        {
+          path: 'order',
+          component: OrderManage,
+          name: ['基础数据', '学员订单'],
           meta: {role: ['admin', 'front']}
         }
       ]

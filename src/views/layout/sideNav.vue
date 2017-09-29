@@ -23,6 +23,10 @@
       <i class="el-icon-menu"></i>
       <span slot="title">学员管理</span>
     </el-menu-item>
+    <el-menu-item index="order" :route="{path: '/admin/order'}">
+      <i-svg icon="order"></i-svg>
+      <span slot="title">学员订单</span>
+    </el-menu-item>
     <el-submenu index="4">
       <template slot="title">
         <i class="el-icon-setting"></i> 
