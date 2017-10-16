@@ -5,80 +5,78 @@
       <el-button type="danger" icon="delete">批量删除</el-button>
       <search-boxs 
         @handleChange="handleChange" 
-        @query="searchByQuery"
-      ></search-boxs>
+        @query="searchByQuery">
+      </search-boxs>
     </el-row> 
     <!-- @selection-change="handleSelectionChange" -->
     <el-table
       v-loading.body="dataLoading"
       :data="orders"
       border
-      tooltip-effect="dark"
-    >
-      <el-table-column type="selection" width="55"></el-table-column>
+      tooltip-effect="dark">
+      <el-table-column 
+        type="selection" 
+        width="55">
+      </el-table-column>
       <el-table-column 
         label="订单号" 
         width="120" 
         fixed
-        prop="orderNo"
-      ></el-table-column>
+        prop="orderNo">
+      </el-table-column>
       <el-table-column 
         label="所报课程" 
         width="120" 
-        prop="course.courseName"
-      >
+        prop="course.courseName">
       </el-table-column>
       <el-table-column 
         label="价格" 
         width="80" 
-        prop="price"
-      ></el-table-column>
+        prop="price">
+      </el-table-column>
       <el-table-column 
         label="应交" 
         width="80" 
-        prop="receivable"
-      ></el-table-column>
+        prop="receivable">
+      </el-table-column>
       <el-table-column 
         label="实交" 
         width="80" 
-        prop="revenue"
-      ></el-table-column>
+        prop="revenue">
+      </el-table-column>
       <el-table-column 
         label="学员姓名" 
         width="100" 
-        prop="student.studentName"
-      >
+        prop="student.studentName">
       </el-table-column>
       <el-table-column 
         label="所属校区" 
         width="100" 
-        prop="campus"
-      ></el-table-column>
+        prop="campus">
+      </el-table-column>
       <el-table-column 
         label="经办校区" 
         width="100" 
-        prop="handleCampus"
-      ></el-table-column>
+        prop="handleCampus">
+      </el-table-column>
       <el-table-column 
         label="经办人" 
         width="100" 
-        prop="handlePeople"
-      ></el-table-column>
+        prop="handlePeople">
+      </el-table-column>
       <el-table-column 
         label="付款方式" 
         width="100" 
-        prop="payment"
-      ></el-table-column>
+        prop="payment">
+      </el-table-column>
       <el-table-column 
         label="报名时间" 
-        width="160"
-      >
+        width="160">
         <template scope="scope">{{ scope.row.date | formatDate }}</template>
       </el-table-column>
       <el-table-column 
         label="操作" 
-        width="140" 
-      >
+        width="140">
         <template scope="scope">
            <!-- @click="handleEdit(scope.$index, scope.row)" -->
            <!-- @click="handleDelete(scope.$index, scope.row)" -->
@@ -93,8 +91,8 @@
           layout="total, prev, pager, next" 
           :total="total"
           :current-page.sync="currentPage"
-          @current-change="handleCurrentChange"
-        ></el-pagination>
+          @current-change="handleCurrentChange">
+        </el-pagination>
       </el-col>
     </el-row>
   </div>

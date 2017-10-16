@@ -4,16 +4,15 @@
       <el-button type="danger" icon="delete" @click="deleteSelection">批量删除</el-button>
       <search-boxs 
         @handleChange="handleChange" 
-        @query="searchByQuery"
-      ></search-boxs>
+        @query="searchByQuery">
+      </search-boxs>
     </el-row> 
     <el-table
       v-loading.body="dataLoading"
       :data="students"
       border
       @selection-change="handleSelectionChange"
-      tooltip-effect="dark"
-    >
+      tooltip-effect="dark">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column 
         label="姓名" 
@@ -29,7 +28,7 @@
       </el-table-column>
       <el-table-column 
         label="电话号码" 
-        width="120"
+        width="130"
         prop="phoneNumber"
       ></el-table-column>
       <el-table-column 
@@ -232,6 +231,7 @@ export default {
         if (res.code === OK_CODE) {
           this.total = res.total
           this.students = res.students
+          console.log(this.students)
         }
       })
     },
