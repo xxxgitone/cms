@@ -25,7 +25,7 @@
       <el-table-column 
         label="所报课程" 
         width="120" 
-        prop="course"
+        prop="course.courseName"
       >
       </el-table-column>
       <el-table-column 
@@ -46,7 +46,7 @@
       <el-table-column 
         label="学员姓名" 
         width="100" 
-        prop="studentName"
+        prop="student.studentName"
       >
       </el-table-column>
       <el-table-column 
@@ -146,6 +146,7 @@ export default {
         if (res.code === OK_CODE) {
           this.total = res.total
           this.orders = res.orders
+          console.log(this.orders)
         }
       })
     },
