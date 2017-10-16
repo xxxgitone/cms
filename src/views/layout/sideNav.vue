@@ -19,10 +19,14 @@
       <el-menu-item index="2-1">选项1</el-menu-item>
       <el-menu-item index="2-2">选项2</el-menu-item>
     </el-submenu>
-    <el-menu-item index="student" :route="{path: '/admin/student'}">
-      <i class="el-icon-menu"></i>
-      <span slot="title">学员管理</span>
-    </el-menu-item>
+    <el-submenu index="3">
+      <template slot="title">
+        <i class="el-icon-menu"></i>
+        <span slot="title">学员管理</span>
+      </template> 
+      <el-menu-item index="student" :route="{path: '/admin/student'}">学员信息</el-menu-item>
+      <el-menu-item index="apply" :route="{path: '/admin/apply'}">学员报名</el-menu-item>
+    </el-submenu>
     <el-menu-item index="order" :route="{path: '/admin/order'}">
       <i-svg icon="order"></i-svg>
       <span slot="title">学员订单</span>
