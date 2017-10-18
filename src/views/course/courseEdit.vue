@@ -20,23 +20,35 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="开课时间" prop="startDate">
-        <el-date-picker 
-          v-model="courseInfo.startDate"
-          type="date"
-          placeholder="选择日期"
-          :picker-options="pickerOptions"
-          :editable="editable"
-        >
-        </el-date-picker>
-      </el-form-item>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="开课时间" prop="startDate">
+            <el-date-picker 
+              v-model="courseInfo.startDate"
+              type="date"
+              placeholder="选择日期"
+              :editable="editable">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="结课时间" prop="endDate">
+            <el-date-picker 
+              v-model="courseInfo.endDate"
+              type="date"
+              placeholder="选择日期"
+              :editable="editable">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-row>
       <el-form-item v-show="courseInfo.rate" label="评分" prop="rate" style="line-height:1.5">
         <el-rate v-model="courseInfo.rate"></el-rate>
       </el-form-item>
       <el-form-item label="课程图片" prop="picUrl">
         <el-input v-model="courseInfo.picUrl" placeholder="请填写图片地址"></el-input>        
       </el-form-item>
-      <el-form-item label="学费" prop="price">
+      <el-form-item label="学费" prop="price" v-show="courseType === 'formal'">
         <el-input v-model.number="courseInfo.price" placeholder="金额"></el-input>
       </el-form-item>
       <el-row>
@@ -156,6 +168,7 @@ export default {
         courseName: '',
         tag: '',
         startDate: '',
+        endDate: '',
         rate: '',
         picUrl: '',
         price: '',
@@ -163,7 +176,8 @@ export default {
         totalPeriod: '',
         teacher: '',
         campus: '',
-        introduction: ''
+        introduction: '',
+        courseType: ''
       },
       rules: {
         courseName: [
@@ -173,6 +187,9 @@ export default {
           {required: true, message: '请选择分类', trigger: 'change'}
         ],
         startDate: [
+          {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
+        ],
+        endDate: [
           {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
         ],
         picUrl: [
@@ -197,16 +214,15 @@ export default {
           {required: true, message: '请选择校区', trigger: 'change'}
         ]
       },
-      editable: false,
-      pickerOptions: {
-        disabledDate (time) {
-          return time.getTime() > Date.now() - 8.64e7
-        }
-      }
+      editable: false
     }
   },
   created () {
     const id = this.$route.params.id
+    const {type} = this.$route.query
+    this.courseType = type
+    this.courseInfo.courseType = type
+    this.courseInfo.price = type === 'audition' ? 0 : ''
     if (id) {
       this.operationType = 'edit'
       this._getCourseById(id)
@@ -219,6 +235,7 @@ export default {
     addConfirm () {
       this.loading = true
       const courseInfo = this.courseInfo
+      console.log(courseInfo)
       this.$refs.form.validate((valid) => {
         if (valid) {
           addCourse(courseInfo).then((res) => {

@@ -3,6 +3,20 @@
     <el-row class="course-search">
       分类
       <tags-list :data="tags" @clicked="handleTagClick"></tags-list>
+      <el-select 
+        v-model="courseType" 
+        clearable 
+        placeholder="课程类型" 
+        class="course-type" 
+        @change="handleTypeChange"
+      >
+        <el-option 
+          v-for="item in options" 
+          :key="item.value" 
+          :label="item.label" 
+          :value="item.value"
+        ></el-option>
+      </el-select>
       <search-boxs
         @handleChange="handleChange"
         @query="searchByQuery"
@@ -18,6 +32,12 @@
     <span class="add" @click="handleAdd">
       <i class="el-icon-plus"></i>
     </span>
+    <el-dialog title="选择新增课程类型" :visible.sync="dialogTableVisible" size="tiny">
+      <div class="type-buttons">
+        <a href="#" @click.prevent="handleAddFormal">正式课程</a>
+        <a href="#" @click.prevent="handleAddAudition">试听课程</a>  
+      </div>    
+    </el-dialog>
     <el-row>
       <el-col :span="24" class="pagination" v-show="courses.length > 0 && total > 16">
         <el-pagination 
@@ -50,7 +70,19 @@ export default {
       pagesize: 16,
       campusVal: '',
       query: '',
-      tag: ''
+      tag: '',
+      dialogTableVisible: false,
+      courseType: '',
+      options: [
+        {
+          label: '正式课程',
+          value: 'formal'
+        },
+        {
+          label: '试听课程',
+          value: 'audition'
+        }
+      ]
     }
   },
   created () {
@@ -63,6 +95,14 @@ export default {
     },
     handleChange (val) {
       this.campusVal = val
+      this.handleVal(val)
+    },
+    handleTypeChange (val) {
+      this.courseType = val
+      this.handleVal(val)
+    },
+    handleVal (val) {
+      console.log(val)
       this._getCoursesByQuery()
       this.currentPage = 1
       if (!val) {
@@ -85,7 +125,13 @@ export default {
       this.currentPage = 1
     },
     handleAdd () {
-      this.$router.push('/admin/course/info/add')
+      this.dialogTableVisible = true
+    },
+    handleAddFormal () {
+      this.$router.push('/admin/course/info/add?type=formal')
+    },
+    handleAddAudition () {
+      this.$router.push('/admin/course/info/add?type=audition')
     },
     handleEdit (item) {
       this.$router.push(`/admin/course/edit/${item._id}`)
@@ -125,12 +171,14 @@ export default {
       const {pagenum} = this.$route.query
       const campusVal = this.campusVal ? this.campusVal : ''
       const courseName = this.query ? this.query : ''
+      const courseType = this.courseType ? this.courseType : ''
       const tag = this.tag ? this.tag : ''
       const data = {
         pagenum,
         campus: campusVal,
         courseName,
-        tag
+        tag,
+        courseType
       }
       this.currentPage = Number(pagenum) || 1
       this._getCourses(data)
@@ -156,8 +204,6 @@ export default {
   .course-search {
     display: flex;
     color: $color-text-light-black;
-    // height: 25px;
-    // line-height: 25px;
     align-items: center;
     margin-bottom: 16px;
   }
@@ -174,9 +220,30 @@ export default {
       color: #fff;
     }
   }
+  .course-type {
+    width: 120px;
+  }
   .pagination {
-    // margin: 16px 0 8px 0;
     text-align: center;
+  }
+  .el-dialog {
+    .type-buttons {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+      a {
+        text-decoration: none;
+        display: inline-block;
+        padding: 10px;
+        width: 100px;
+        height: 40px;
+        border-radius: 50%;
+        color: #fff;
+        background: $color-button-light-blue;
+        text-align: center;
+      }
+    }
   }
 }
 </style>
