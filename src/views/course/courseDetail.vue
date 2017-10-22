@@ -56,9 +56,16 @@
       </el-col>      
     </el-row>
     <template>
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane label="课程介绍" name="introduction">{{course.introduction}}</el-tab-pane>
-        <el-tab-pane label="课程反馈" name="feedback">课程反馈</el-tab-pane>
+        <el-tab-pane label="课程反馈" name="feedback">
+          <comment :comments="commnetsFeedback"></comment>
+          <span v-show="commnetsFeedback.length === 0">暂无反馈</span>
+        </el-tab-pane>
+        <el-tab-pane label="课程咨询" name="advisory">
+          <comment :comments="commentsAdv"></comment>
+          <span v-show="commentsAdv.length === 0">暂无咨询</span>
+        </el-tab-pane>
         <el-tab-pane label="所有学员" name="students">所有学员</el-tab-pane>
       </el-tabs>
     </template>
@@ -67,20 +74,43 @@
 
 <script>
 import {getCourseById} from 'api/course'
+import {fetchCommentsByCourseIdAndType} from 'api/comment'
 import {OK_CODE} from 'api/config'
+import Comment from 'components/comment/comment'
 
 export default {
   data () {
     return {
       course: [],
-      activeName: 'introduction'
+      activeName: 'introduction',
+      courseId: '',
+      commentsAdv: [],
+      commnetsFeedback: []
     }
   },
   created () {
-    const {id} = this.$route.params
-    this._getCourseById(id)
+    this.courseId = this.$route.params.id
+    this._getCourseById(this.courseId)
   },
   methods: {
+    handleTabClick (tab, event) {
+      const type = tab.name
+      if (type === 'introduction') {
+
+      } else if (type === 'students') {
+
+      } else {
+        fetchCommentsByCourseIdAndType(this.courseId, type).then((res) => {
+          if (res.code === OK_CODE) {
+            if (type === 'advisory') {
+              this.commentsAdv = res.comments
+            } else if (type === 'feedback') {
+              this.commnetsFeedback = res.comments
+            }
+          }
+        })
+      }
+    },
     _getCourseById (id) {
       getCourseById(id).then((res) => {
         if (res.code === OK_CODE) {
@@ -88,6 +118,9 @@ export default {
         }
       })
     }
+  },
+  components: {
+    Comment
   }
 }
 </script>
