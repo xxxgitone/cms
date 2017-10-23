@@ -7,3 +7,11 @@ export const fetchCommentsByCourseIdAndType = (id, type) => {
     return Promise.resolve(res.data)
   })
 }
+
+export const addComment = (data) => {
+  let url = '/api/comments'
+  return axios.post(url, data)
+  .then((res) => {
+    return Promise.resolve(res.data)
+  })
+}

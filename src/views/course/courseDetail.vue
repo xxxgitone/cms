@@ -59,11 +59,11 @@
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane label="课程介绍" name="introduction">{{course.introduction}}</el-tab-pane>
         <el-tab-pane label="课程反馈" name="feedback">
-          <comment :comments="commnetsFeedback"></comment>
+          <comment :comments="commnetsFeedback" @submit="handleSubmit"></comment>
           <span v-show="commnetsFeedback.length === 0">暂无反馈</span>
         </el-tab-pane>
         <el-tab-pane label="课程咨询" name="advisory">
-          <comment :comments="commentsAdv"></comment>
+          <comment :comments="commentsAdv" @submit="handleSubmit"></comment>
           <span v-show="commentsAdv.length === 0">暂无咨询</span>
         </el-tab-pane>
         <el-tab-pane label="所有学员" name="students">所有学员</el-tab-pane>
@@ -74,9 +74,10 @@
 
 <script>
 import {getCourseById} from 'api/course'
-import {fetchCommentsByCourseIdAndType} from 'api/comment'
+import {fetchCommentsByCourseIdAndType, addComment} from 'api/comment'
 import {OK_CODE} from 'api/config'
 import Comment from 'components/comment/comment'
+import {mapGetters} from 'vuex'
 
 export default {
   data () {
@@ -92,6 +93,11 @@ export default {
     this.courseId = this.$route.params.id
     this._getCourseById(this.courseId)
   },
+  computed: {
+    ...mapGetters([
+      'id'
+    ])
+  },
   methods: {
     handleTabClick (tab, event) {
       const type = tab.name
@@ -102,6 +108,7 @@ export default {
       } else {
         fetchCommentsByCourseIdAndType(this.courseId, type).then((res) => {
           if (res.code === OK_CODE) {
+            console.log(res.comments)
             if (type === 'advisory') {
               this.commentsAdv = res.comments
             } else if (type === 'feedback') {
@@ -110,6 +117,29 @@ export default {
           }
         })
       }
+    },
+    handleSubmit (comment, content) {
+      if (!content) {
+        return
+      }
+      const data = {
+        id: comment._id,
+        from: this.id,
+        content
+      }
+      addComment(data).then((res) => {
+        if (res.code === OK_CODE) {
+          fetchCommentsByCourseIdAndType(this.courseId, comment.type).then((res) => {
+            if (res.code === OK_CODE) {
+              if (comment.type === 'advisory') {
+                this.commentsAdv = res.comments
+              } else if (comment.type === 'feedback') {
+                this.commnetsFeedback = res.comments
+              }
+            }
+          })
+        }
+      })
     },
     _getCourseById (id) {
       getCourseById(id).then((res) => {
