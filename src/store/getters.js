@@ -1,5 +1,7 @@
 export const account = state => state.account
 
+export const id = state => state.id
+
 export const token = state => state.token
 
 export const role = state => state.role

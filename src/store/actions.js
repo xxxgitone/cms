@@ -19,6 +19,7 @@ export const GetUsetByToken = ({commit}) => {
   return getUserByToken().then((res) => {
     if (res.code === OK_CODE) {
       commit(types.SET_ROLE, res.user.role)
+      commit(types.SET_ID, res.user._id)
       commit(types.SET_CAMPUS, res.user.campus)
       commit(types.SET_ACCOUNT, res.user.account)
       commit(types.SET_USER_NAME, res.user.userName)
@@ -34,6 +35,7 @@ export const Logout = ({commit}) => {
   return new Promise((resolve, reject) => {
     commit(types.SET_TOKEN, '')
     commit(types.SET_ROLE, '')
+    commit(types.SET_ID, '')
     commit(types.SET_CAMPUS, '')
     commit(types.SET_ACCOUNT, '')
     commit(types.SET_USER_NAME, '')

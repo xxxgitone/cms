@@ -4,6 +4,9 @@ const mutations = {
   [types.SET_ACCOUNT] (state, account) {
     state.account = account
   },
+  [types.SET_ID] (state, id) {
+    state.id = id
+  },
   [types.SET_TOKEN] (state, token) {
     state.token = token
   },
