@@ -131,7 +131,7 @@
         label="身份" 
         width="100" 
       >
-        <template scope="scope">{{ formatRole(scope.row.role) }}</template>
+        <template scope="scope">{{ scope.row.role | formatRole }}</template>
       </el-table-column>
       <el-table-column 
         label="所属校区" 
@@ -275,13 +275,6 @@ export default {
     this._getUsersByQuery()
   },
   methods: {
-    formatRole (role) {
-      if (role === 'admin') {
-        return '管理员'
-      } else if (role === 'front') {
-        return '校区前台'
-      }
-    },
     searchByQuery (newQyery) {
       this.query = newQyery
       this._getUsersByQuery()

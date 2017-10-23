@@ -40,3 +40,11 @@ export function formatGender (gender) {
     return '女'
   }
 }
+
+export function formatRole (role) {
+  if (role === 'admin') {
+    return '管理员'
+  } else if (role === 'front') {
+    return '校区前台'
+  }
+}
