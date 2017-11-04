@@ -17,3 +17,9 @@ export const deleteStudent = (_id) => {
     return Promise.resolve(res.data)
   })
 }
+
+export const getStudentsByCourseId = (_id) => {
+  const url = '/api/studentsByCourseId'
+  return axios.get(`${url}?_id=${_id}`)
+  .then(res => Promise.resolve(res.data))
+}

@@ -66,7 +66,31 @@
           <comment :comments="commentsAdv" @submit="handleSubmit"></comment>
           <span v-show="commentsAdv.length === 0">暂无咨询</span>
         </el-tab-pane>
-        <el-tab-pane label="所有学员" name="students">所有学员</el-tab-pane>
+        <el-tab-pane label="所有学员" name="students">
+           <template>
+            <el-table
+              :data="students"
+              style="width: 100%">
+              <el-table-column
+                prop="studentName"
+                label="姓名"
+                width="80">
+              </el-table-column>
+              <el-table-column
+                label="性别"
+                width="80">
+                <template scope="scope">
+                  {{ scope.row.gender | formatGender }}
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="phoneNumber"
+                label="电话号码"
+                width="160">
+              </el-table-column>
+            </el-table>
+          </template>
+        </el-tab-pane>
       </el-tabs>
     </template>
   </div>
@@ -75,6 +99,7 @@
 <script>
 import {getCourseById} from 'api/course'
 import {fetchCommentsByCourseIdAndType, addComment} from 'api/comment'
+import {getStudentsByCourseId} from 'api/student'
 import {OK_CODE} from 'api/config'
 import Comment from 'components/comment/comment'
 import {mapGetters} from 'vuex'
@@ -86,7 +111,8 @@ export default {
       activeName: 'introduction',
       courseId: '',
       commentsAdv: [],
-      commnetsFeedback: []
+      commnetsFeedback: [],
+      students: []
     }
   },
   created () {
@@ -104,11 +130,15 @@ export default {
       if (type === 'introduction') {
 
       } else if (type === 'students') {
-
+        getStudentsByCourseId(this.courseId).then((res) => {
+          console.log(res.students)
+          if (res.code === OK_CODE) {
+            this.students = res.students
+          }
+        })
       } else {
         fetchCommentsByCourseIdAndType(this.courseId, type).then((res) => {
           if (res.code === OK_CODE) {
-            console.log(res.comments)
             if (type === 'advisory') {
               this.commentsAdv = res.comments
             } else if (type === 'feedback') {

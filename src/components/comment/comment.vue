@@ -34,7 +34,7 @@
                   <span>[{{ reply.from.role | formatRole }}]</span>
                 </span>
                 <span class="content">{{ reply.content}}</span>
-                <span class="timeAgo">{{ reply.createAt && reply.createAt | timeAgo }}</span>
+                <span class="timeAgo">{{ reply.createAt | timeAgo }}</span>
               </div>
             </div>
           </li>
