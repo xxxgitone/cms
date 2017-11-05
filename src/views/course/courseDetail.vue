@@ -67,29 +67,45 @@
           <span v-show="commentsAdv.length === 0">暂无咨询</span>
         </el-tab-pane>
         <el-tab-pane label="所有学员" name="students">
-           <template>
-            <el-table
-              :data="students"
-              style="width: 100%">
-              <el-table-column
-                prop="studentName"
-                label="姓名"
-                width="80">
-              </el-table-column>
-              <el-table-column
-                label="性别"
-                width="80">
-                <template scope="scope">
-                  {{ scope.row.gender | formatGender }}
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="phoneNumber"
-                label="电话号码"
-                width="160">
-              </el-table-column>
-            </el-table>
-          </template>
+          <el-table
+            :data="students"
+            v-show="students.length > 0">
+            <el-table-column
+              prop="studentName"
+              label="姓名">
+            </el-table-column>
+            <el-table-column
+              label="性别">
+              <template scope="scope">
+                {{ scope.row.gender | formatGender }}
+              </template>
+            </el-table-column>
+            <el-table-column 
+              label="年龄">
+              <template scope="scope">{{ scope.row.birthday | formatAge }}</template>
+            </el-table-column>
+            <el-table-column 
+              label="家长姓名" 
+              prop="parentName">
+            </el-table-column>
+            <el-table-column
+              prop="phoneNumber"
+              label="电话号码">
+            </el-table-column>
+            <el-table-column 
+              label="出生日期" >
+              <template scope="scope">{{ scope.row.birthday | formatDate }}</template>
+            </el-table-column>
+            <el-table-column 
+              label="是否停课">
+              <template scope="scope">
+                <el-tag :type="scope.row.closed ? 'danger' : 'primary'">
+                  {{ scope.row.closed ? '是' : '否'}}
+                </el-tag>
+              </template>
+            </el-table-column>
+          </el-table>
+          <span v-show="students.length === 0">暂无学员</span>
         </el-tab-pane>
       </el-tabs>
     </template>
