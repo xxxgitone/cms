@@ -14,10 +14,10 @@
     <el-submenu index="2">
       <template slot="title">
         <i-svg icon="course"></i-svg>
-        <span slot="title">导航一</span>
+        <span slot="title">试听预约</span>
       </template> 
-      <el-menu-item index="2-1">选项1</el-menu-item>
-      <el-menu-item index="2-2">选项2</el-menu-item>
+      <el-menu-item index="audition" :route="{path:'/admin/audition'}">预约记录</el-menu-item>
+      <el-menu-item index="reservation" :route="{path:'/admin/reservation'}">学员预约</el-menu-item>
     </el-submenu>
     <el-submenu index="3">
       <template slot="title">
