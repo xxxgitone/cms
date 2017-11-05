@@ -51,9 +51,13 @@
       </el-table-column>
       <el-table-column 
         label="所报课程" 
-        width="120" 
         prop="course"
-      >
+        width="160">
+        <template scope="scope">
+          <router-link v-for="item in scope.row.course" :key="item._id" :to="`/admin/course/${item._id}`">
+            {{ item.courseName }}
+          </router-link>
+        </template>
       </el-table-column>
       <el-table-column label="费用">
         <el-table-column 
