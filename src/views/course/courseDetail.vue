@@ -66,10 +66,10 @@
           <comment :comments="commentsAdv" @submit="handleSubmit"></comment>
           <span v-show="commentsAdv.length === 0">暂无咨询</span>
         </el-tab-pane>
-        <el-tab-pane label="所有学员" name="students">
+        <el-tab-pane :label="getLabelName" :name="course.courseType === 'formal' ? 'students' : 'audition'">
           <el-table
-            :data="students"
-            v-show="students.length > 0">
+            :data="course.courseType === 'formal' ? students : auditions"
+            v-show="students.length > 0 || auditions.length > 0">
             <el-table-column
               prop="studentName"
               label="姓名">
@@ -105,7 +105,8 @@
               </template>
             </el-table-column>
           </el-table>
-          <span v-show="students.length === 0">暂无学员</span>
+          <span v-if="students.length === 0 && course.courseType === 'formal'">暂无学员</span>
+          <span v-if="auditions.length === 0 && course.courseType === 'audition'">暂无试听</span>
         </el-tab-pane>
       </el-tabs>
     </template>
@@ -116,6 +117,7 @@
 import {getCourseById} from 'api/course'
 import {fetchCommentsByCourseIdAndType, addComment} from 'api/comment'
 import {getStudentsByCourseId} from 'api/student'
+import {getAuditionsByCourseId} from 'api/audition'
 import {OK_CODE} from 'api/config'
 import Comment from 'components/comment/comment'
 import {mapGetters} from 'vuex'
@@ -123,12 +125,14 @@ import {mapGetters} from 'vuex'
 export default {
   data () {
     return {
-      course: [],
+      course: {},
       activeName: 'introduction',
       courseId: '',
       commentsAdv: [],
       commnetsFeedback: [],
-      students: []
+      students: [],
+      auditions: [],
+      type: ''
     }
   },
   created () {
@@ -138,7 +142,14 @@ export default {
   computed: {
     ...mapGetters([
       'id'
-    ])
+    ]),
+    getLabelName () {
+      if (this.course.courseType === 'formal') {
+        return '所有学员'
+      } else if (this.course.courseType === 'audition') {
+        return '试听学员'
+      }
+    }
   },
   methods: {
     handleTabClick (tab, event) {
@@ -147,9 +158,15 @@ export default {
 
       } else if (type === 'students') {
         getStudentsByCourseId(this.courseId).then((res) => {
-          console.log(res.students)
           if (res.code === OK_CODE) {
             this.students = res.students
+          }
+        })
+      } else if (type === 'audition') {
+        getAuditionsByCourseId(this.courseId).then(res => {
+          console.log(res.auditions)
+          if (res.code === OK_CODE) {
+            this.auditions = res.auditions
           }
         })
       } else {

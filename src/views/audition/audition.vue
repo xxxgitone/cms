@@ -11,6 +11,7 @@
     <!-- @selection-change="handleSelectionChange" -->
     <el-table
       :data="auditions"
+      v-loading.body="dataLoading"
       border
       tooltip-effect="dark">
       <el-table-column type="selection" width="55"></el-table-column>
@@ -85,7 +86,8 @@ import {OK_CODE} from 'api/config'
 export default {
   data () {
     return {
-      auditions: []
+      auditions: [],
+      dataLoading: true
     }
   },
   created () {
@@ -93,7 +95,9 @@ export default {
   },
   methods: {
     _getAuditions () {
+      this.dataLoading = true
       getAuditions().then(res => {
+        this.dataLoading = false
         if (res.code === OK_CODE) {
           console.log(res.auditions)
           this.auditions = res.auditions
@@ -108,12 +112,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../../common/scss/variable.scss";
+
 .audition-manage {
   .search-boxs {
     display: flex;
   }
   .el-table {
     margin-top: 24px;
+    a {
+      color: $color-button-light-blue;
+    }
   }
  }
 </style>

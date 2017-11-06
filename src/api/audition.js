@@ -5,3 +5,10 @@ export const getAuditions = () => {
   return axios.get(url)
   .then(res => Promise.resolve(res.data))
 }
+
+export const getAuditionsByCourseId = (id) => {
+  const url = '/api/auditionsByCourseId'
+  console.log(`${url}？_id=${id}`)
+  return axios.get(`${url}?_id=${id}`)
+  .then(res => Promise.resolve(res.data))
+}
