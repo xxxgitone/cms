@@ -15,6 +15,7 @@ const CourseDetail = () => import('views/course/courseDetail')
 const StudentManage = () => import('views/student/studentManage')
 const OrderManage = () => import('views/order/orderManage')
 const Audition = () => import('views/audition/audition')
+const StudentApply = () => import('views/student/studentApply')
 
 Vue.use(Router)
 
@@ -114,6 +115,12 @@ export default new Router({
           path: 'audition',
           component: Audition,
           name: ['试听预约', '预约记录'],
+          meta: {role: ['admin', 'front']}
+        },
+        {
+          path: 'apply',
+          component: StudentApply,
+          name: ['学员管理', '学员报名'],
           meta: {role: ['admin', 'front']}
         }
       ]
