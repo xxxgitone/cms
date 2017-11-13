@@ -10,6 +10,12 @@ export const getCourses = (data) => {
   })
 }
 
+export const getCourseByType = (type) => {
+  let url = '/api/getCourseByType'
+  return axios.get(`${url}?courseType=${type}`)
+    .then(res => Promise.resolve(res.data))
+}
+
 export const getCourseById = (id) => {
   let url = '/api/course'
   return axios.get(`${url}?_id=${id}`)
