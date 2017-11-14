@@ -9,3 +9,9 @@ export const getOrders = (data) => {
     return Promise.resolve(res.data)
   })
 }
+
+export const addOrder = (data) => {
+  let url = '/api/orders'
+  return axios.post(url, data)
+  .then(res => Promise.resolve(res.data))
+}

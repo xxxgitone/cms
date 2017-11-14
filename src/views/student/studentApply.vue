@@ -31,7 +31,7 @@
       </el-form-item>
       <el-form-item label="课程" prop="course">
         <el-button type="text" @click="dialogTableVisible = true">选择课程</el-button>
-        <el-input v-model="applyInfo.course" placeholder="请选择课程"></el-input>
+        <span>所选课程:<span style="color:red;">{{courseName}}</span></span>
         <el-dialog 
           title="课程列表" 
           :visible.sync="dialogTableVisible">
@@ -78,10 +78,10 @@
       </el-form-item>
     </el-form>
     <div class="handle-button">
-      <el-button>取消</el-button>
       <el-button 
-        type="primary">
-        确定添加
+        type="primary"
+        @click="applyConfirm">
+        确定报名
       </el-button>
     </div>
   </div>
@@ -89,6 +89,7 @@
 
 <script>
 import {OK_CODE} from 'api/config'
+import {addOrder} from 'api/order'
 import {getCourseByType} from 'api/course'
 
 export default {
@@ -100,12 +101,13 @@ export default {
         birthday: '',
         gender: '',
         phoneNumber: '',
-        course: '',
+        courseId: '',
         revenue: '',
         payment: '',
         handleCampus: '',
         handlePeople: ''
       },
+      courseName: '',
       options: [
         {
           value: '微信',
@@ -166,7 +168,22 @@ export default {
   },
   methods: {
     handleDbclick (row, column, cell, event) {
-      console.log(row)
+      this.courseName = row.courseName
+      this.applyInfo.courseId = row._id
+      console.log(this.applyInfo)
+      this.dialogTableVisible = false
+    },
+    applyConfirm () {
+      addOrder(this.applyInfo).then(res => {
+        if (res.code === OK_CODE) {
+          this.$message({
+            message: '报名成功',
+            showClose: true,
+            type: 'success'
+          })
+          this.$router.push('/admin/order')
+        }
+      })
     },
     _getCourseByType (type) {
       getCourseByType(type).then((res) => {
