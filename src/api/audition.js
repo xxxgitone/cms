@@ -12,3 +12,9 @@ export const getAuditionsByCourseId = (id) => {
   return axios.get(`${url}?_id=${id}`)
   .then(res => Promise.resolve(res.data))
 }
+
+export const addAudition = (data) => {
+  const url = '/api/audition'
+  return axios.post(url, data)
+  .then(res => Promise.resolve(res.data))
+}
