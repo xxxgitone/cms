@@ -115,7 +115,7 @@
 
 <script>
 import {getCourseById} from 'api/course'
-import {fetchCommentsByCourseIdAndType, addComment} from 'api/comment'
+import {fetchCommentsByCourseIdAndType, addComment, updateIsRead} from 'api/comment'
 import {getStudentsByCourseId} from 'api/student'
 import {getAuditionsByCourseId} from 'api/audition'
 import {OK_CODE} from 'api/config'
@@ -137,7 +137,13 @@ export default {
   },
   created () {
     this.courseId = this.$route.params.id
+    const {from} = this.$route.query
     this._getCourseById(this.courseId)
+    if (from === 'check') {
+      updateIsRead(this.courseId).then(res => {
+        console.log(res)
+      })
+    }
   },
   computed: {
     ...mapGetters([

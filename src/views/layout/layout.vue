@@ -16,6 +16,12 @@
             <i-svg :icon="iconName" @clicked="switchCollapse"></i-svg>
           </el-col>
           <el-col :span="22" class="nav-bar">
+            <el-badge :value="commentsFeedback.length" :max="10">
+              <el-button size="small" @click="showComment('feedback')">反馈</el-button>
+            </el-badge>
+            <el-badge :value="commentsAdv.length" :max="10">
+              <el-button size="small" @click="showComment('advisory')">咨询</el-button>
+            </el-badge>
             <head-nav></head-nav>
           </el-col>
           <el-col :span="1">
@@ -38,17 +44,22 @@ import SideNav from './sideNav'
 import HeadNav from './headNav'
 import AppFooter from './footer'
 import Breadcrumb from 'components/breadcrumb/breadcrumb'
+import {fetchCommentsByType} from 'api/comment'
+import {OK_CODE} from 'api/config'
 import {mapGetters} from 'vuex'
 
 export default {
   data () {
     return {
       isCollapse: false,
-      breadcrumbs: []
+      breadcrumbs: [],
+      commentsAdv: [],
+      commentsFeedback: []
     }
   },
   created () {
     this._getBreadcrumb()
+    this._getComments()
   },
   computed: {
     iconName () {
@@ -62,16 +73,34 @@ export default {
     switchCollapse () {
       this.isCollapse = !this.isCollapse
     },
+    showComment (type) {
+      this.$router.push(`/admin/comments?type=${type}`)
+    },
     _getBreadcrumb () {
       const matched = this.$route.matched.slice(1)
       matched.forEach(item => {
         this.breadcrumbs = item.name ? item.name : []
+      })
+    },
+    _getComments () {
+      const types = ['advisory', 'feedback']
+      types.forEach(type => {
+        fetchCommentsByType(type).then(res => {
+          if (res.code === OK_CODE) {
+            if (type === 'advisory') {
+              this.commentsAdv = res.comments
+            } else if (type === 'feedback') {
+              this.commentsFeedback = res.comments
+            }
+          }
+        })
       })
     }
   },
   watch: {
     $route () {
       this._getBreadcrumb()
+      this._getComments()
     }
   },
   components: {
@@ -158,6 +187,10 @@ export default {
     .nav-bar {
       display: flex;
       justify-content: flex-end;
+      align-items: center;
+      .el-badge {
+        margin-right: 32px;
+      }
       .avatar {
         width: 45px;
         height: 45px;

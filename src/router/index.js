@@ -17,6 +17,7 @@ const OrderManage = () => import('views/order/orderManage')
 const Audition = () => import('views/audition/audition')
 const StudentApply = () => import('views/student/studentApply')
 const ReservationAudition = () => import('views/audition/reservationAudition')
+const CommentList = () => import('views/comment-list/comment-list')
 
 Vue.use(Router)
 
@@ -109,7 +110,7 @@ export default new Router({
         {
           path: 'order',
           component: OrderManage,
-          name: ['学员管理', '学员报名'],
+          name: ['学员订单'],
           meta: {role: ['admin', 'front']}
         },
         {
@@ -128,6 +129,12 @@ export default new Router({
           path: 'reservation',
           component: ReservationAudition,
           name: ['试听预约', '学员预约'],
+          meta: {role: ['admin', 'front']}
+        },
+        {
+          path: 'comments',
+          component: CommentList,
+          name: ['评论列表'],
           meta: {role: ['admin', 'front']}
         }
       ]
