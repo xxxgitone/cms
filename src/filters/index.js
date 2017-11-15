@@ -48,3 +48,11 @@ export function formatRole (role) {
     return '校区前台'
   }
 }
+
+export function formatType (type) {
+  if (type === 'audition') {
+    return '试听'
+  } else if (type === 'formal') {
+    return '正式'
+  }
+}
