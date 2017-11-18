@@ -18,6 +18,7 @@ const Audition = () => import('views/audition/audition')
 const StudentApply = () => import('views/student/studentApply')
 const ReservationAudition = () => import('views/audition/reservationAudition')
 const CommentList = () => import('views/comment-list/comment-list')
+const Task = () => import('views/task/task')
 
 Vue.use(Router)
 
@@ -136,6 +137,12 @@ export default new Router({
           component: CommentList,
           name: ['评论列表'],
           meta: {role: ['admin', 'front']}
+        },
+        {
+          path: 'task',
+          component: Task,
+          name: ['消息通知', '下发任务'],
+          meta: {role: ['admin']}
         }
       ]
     }

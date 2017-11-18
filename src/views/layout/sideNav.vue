@@ -5,12 +5,19 @@
     theme="dark"
     class="el-menu-vertical"
     router
-    unique-opened
-  >
-    <el-menu-item index="home">
+    unique-opened>
+    <el-menu-item index="home" :route="{path: '/admin/home'}">
       <i-svg icon="home"></i-svg>
       <span slot="title">首页</span>
     </el-menu-item>
+    <el-submenu index="1" v-if="role === 'admin'">
+      <template slot="title">
+        <i class="el-icon-message"></i>
+        <span>消息通知</span>
+      </template>
+      <el-menu-item index="task" :route="{path: '/admin/task'}">下发任务</el-menu-item>
+      <el-menu-item index="schedule" :route="{path: '/admin/schedule'}">任务进度</el-menu-item>      
+    </el-submenu>
     <el-submenu index="2">
       <template slot="title">
         <i-svg icon="course"></i-svg>
@@ -45,6 +52,8 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+
 export default {
   props: {
     isCollapse: {
@@ -59,6 +68,11 @@ export default {
   },
   created () {
     this._getActiveIndex()
+  },
+  computed: {
+    ...mapGetters([
+      'role'
+    ])
   },
   methods: {
     _getActiveIndex () {
