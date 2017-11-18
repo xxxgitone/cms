@@ -2,7 +2,7 @@
   <div class="layout">
     <div class="side-nav">
        <h1 class="title" :class="{hide: isCollapse}">
-        <span class="title-text">{{"艺术学校(" + campus.substr(0, 2) + ")校区"}}</span>
+        <span class="title-text">文化艺术培训学院</span>
       </h1> 
       <h1 class="title collapse-title" :class="{show: isCollapse}">
         <img class="title-logo"src="../../common/img/cms.png">
@@ -15,7 +15,10 @@
           <el-col :span="1" class="collapse-icon">
             <i-svg :icon="iconName" @clicked="switchCollapse"></i-svg>
           </el-col>
-          <el-col :span="22" class="nav-bar">
+          <el-col :span="4" class="current-campus">
+            <span>当前校区：{{campus}}</span>
+          </el-col>
+          <el-col :span="18" class="nav-bar">
             <el-badge :value="commentsFeedback.length" :max="10">
               <el-button size="small" @click="showComment('feedback')">反馈</el-button>
             </el-badge>
@@ -183,6 +186,12 @@ export default {
       &:hover {
         background: #C5DFF3;
       }
+    }
+    .current-campus {
+      display: flex;
+      height: 60px;
+      align-items: center;
+      justify-content: center;
     }
     .nav-bar {
       display: flex;
