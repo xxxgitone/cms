@@ -73,6 +73,7 @@ export default {
             message: '发布成功',
             type: 'success'
           })
+          this.$router.push('/admin/schedule')
         }
       })
     }

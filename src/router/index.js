@@ -19,6 +19,7 @@ const StudentApply = () => import('views/student/studentApply')
 const ReservationAudition = () => import('views/audition/reservationAudition')
 const CommentList = () => import('views/comment-list/comment-list')
 const Task = () => import('views/task/task')
+const TaskSchedule = () => import('views/task/taskSchedule')
 
 Vue.use(Router)
 
@@ -142,6 +143,12 @@ export default new Router({
           path: 'task',
           component: Task,
           name: ['消息通知', '下发任务'],
+          meta: {role: ['admin']}
+        },
+        {
+          path: 'schedule',
+          component: TaskSchedule,
+          name: ['消息通知', '任务进度'],
           meta: {role: ['admin']}
         }
       ]
