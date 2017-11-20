@@ -150,6 +150,12 @@ export default new Router({
           component: TaskSchedule,
           name: ['消息通知', '任务进度'],
           meta: {role: ['admin']}
+        },
+        {
+          path: 'tasks',
+          component: TaskSchedule,
+          name: ['任务列表'],
+          meta: {role: ['front']}
         }
       ]
     }

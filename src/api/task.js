@@ -13,3 +13,9 @@ export const addTask = (data) => {
   return axios.post(url, data)
   .then(res => Promise.resolve(res.data))
 }
+
+export const updateTask = (data) => {
+  const url = '/api/task'
+  return axios.put(url, data)
+  .then(res => Promise.resolve(res.data))
+}

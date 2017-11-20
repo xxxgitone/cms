@@ -19,6 +19,9 @@
             <span>当前校区：{{campus}}</span>
           </el-col>
           <el-col :span="18" class="nav-bar">
+            <el-badge :value="tasks.length" :max="10" v-show="role === 'front'">
+              <el-button size="small" @click="showTask">任务</el-button>
+            </el-badge>
             <el-badge :value="commentsFeedback.length" :max="10">
               <el-button size="small" @click="showComment('feedback')">反馈</el-button>
             </el-badge>
@@ -49,6 +52,7 @@ import AppFooter from './footer'
 import Breadcrumb from 'components/breadcrumb/breadcrumb'
 import {fetchCommentsByType} from 'api/comment'
 import {OK_CODE} from 'api/config'
+import {getTasks} from 'api/task'
 import {mapGetters} from 'vuex'
 
 export default {
@@ -57,19 +61,22 @@ export default {
       isCollapse: false,
       breadcrumbs: [],
       commentsAdv: [],
-      commentsFeedback: []
+      commentsFeedback: [],
+      tasks: []
     }
   },
   created () {
     this._getBreadcrumb()
     this._getComments()
+    this._getTasks()
   },
   computed: {
     iconName () {
       return this.isCollapse ? 'unfold' : 'collapse'
     },
     ...mapGetters([
-      'campus'
+      'campus',
+      'role'
     ])
   },
   methods: {
@@ -78,6 +85,9 @@ export default {
     },
     showComment (type) {
       this.$router.push(`/admin/comments?type=${type}`)
+    },
+    showTask () {
+      this.$router.push('/admin/tasks')
     },
     _getBreadcrumb () {
       const matched = this.$route.matched.slice(1)
@@ -98,12 +108,23 @@ export default {
           }
         })
       })
+    },
+    _getTasks () {
+      const data = {
+        campus: this.campus
+      }
+      getTasks(data).then(res => {
+        if (res.code === OK_CODE) {
+          this.tasks = res.tasks.filter(item => item.status !== 'fulfilled')
+        }
+      })
     }
   },
   watch: {
     $route () {
       this._getBreadcrumb()
       this._getComments()
+      this._getTasks()
     }
   },
   components: {

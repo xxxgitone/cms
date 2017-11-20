@@ -22,6 +22,21 @@
           type="circle" 
           :percentage="percentage">
         </el-progress>
+        <div class="buttons" v-show="item.type === 'ordinary' && role === 'front'">
+          <el-button 
+            v-if="item.status === 'pending'" 
+            :plain="true" 
+            type="success" 
+            size="mini" 
+            @click="handleTask(item, 'progress')">进行
+          </el-button>
+          <el-button 
+            v-if="item.status === 'progress'" 
+            type="primary" 
+            size="mini" 
+            @click="handleTask(item, 'fulfilled')">完成
+          </el-button>
+        </div>
       </li>
     </ul>
   </div>
@@ -29,7 +44,7 @@
 
 <script>
 import {OK_CODE} from 'api/config'
-import {getTasks} from 'api/task'
+import {getTasks, updateTask} from 'api/task'
 import {mapGetters} from 'vuex'
 
 export default {
@@ -49,10 +64,23 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'campus'
+      'campus',
+      'role'
     ])
   },
   methods: {
+    handleTask (data, type) {
+      data.status = type
+      updateTask(data).then(res => {
+        if (res.code === OK_CODE) {
+          this.$message({
+            showClose: true,
+            message: res.msg,
+            type: 'success'
+          })
+        }
+      })
+    },
     _getTasks () {
       const data = {
         campus: this.campus
@@ -60,7 +88,6 @@ export default {
       getTasks(data).then(res => {
         if (res.code === OK_CODE) {
           this.tasks = res.tasks
-          console.log(this.tasks)
         }
       })
     }
@@ -95,6 +122,10 @@ export default {
       span {
         font-size: $font-size-small;
       }
+    }
+    .buttons {
+      margin-top: 6px;
+      text-align: right;
     }
   }
 }
