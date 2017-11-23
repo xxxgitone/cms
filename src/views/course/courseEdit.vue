@@ -46,7 +46,18 @@
         <el-rate v-model="courseInfo.rate"></el-rate>
       </el-form-item>
       <el-form-item label="课程图片" prop="picUrl">
-        <el-input v-model="courseInfo.picUrl" placeholder="请填写图片地址"></el-input>        
+        <el-upload
+          class="upload-demo"
+          drag
+          :action="url"
+          :before-upload="beforeUpload"
+          :on-success="handleSuccess"
+          name="image">
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
+          <el-input v-model="courseInfo.picUrl" type="hidden" size="small"></el-input>
+        </el-upload>   
+        
       </el-form-item>
       <el-form-item label="学费" prop="price" v-show="courseType === 'formal'">
         <el-input v-model.number="courseInfo.price" placeholder="金额"></el-input>
@@ -108,6 +119,7 @@
 <script>
 import {addCourse, editCourse, getCourseById} from 'api/course'
 import {OK_CODE} from 'api/config'
+import {mapGetters} from 'vuex'
 
 export default {
   data () {
@@ -192,9 +204,6 @@ export default {
         endDate: [
           {type: 'date', required: true, message: '请选择日期', trigger: 'change'}
         ],
-        picUrl: [
-          {required: true, message: '请输入图片地址', trigger: 'blur'}
-        ],
         price: [
           {required: true, message: '请输入金额'},
           {type: 'number', message: '请输入正确的金额'}
@@ -227,6 +236,14 @@ export default {
       this.operationType = 'edit'
       this._getCourseById(id)
     }
+  },
+  computed: {
+    url () {
+      return `/api/upload?token=${this.token}`
+    },
+    ...mapGetters([
+      'token'
+    ])
   },
   methods: {
     handleCancel () {
@@ -269,6 +286,28 @@ export default {
           this.$router.push(`/admin/course`)
         }
       })
+    },
+    beforeUpload (file) {
+      const type = file.type
+      const reg = /^(image)/i
+      if (!reg.test(type)) {
+        this.$message.error('请选择正确图片')
+        return false
+      }
+    },
+    handleSuccess (response, file, fileList) {
+      if (response.code === OK_CODE) {
+        this.$message({
+          type: 'success',
+          message: response.msg
+        })
+        this.courseInfo.picUrl = response.url
+      } else {
+        this.$message({
+          type: 'error',
+          message: '上传失败，请重新上传'
+        })
+      }
     },
     _getCourseById (id) {
       getCourseById(id).then((res) => {
