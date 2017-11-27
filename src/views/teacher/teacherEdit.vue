@@ -38,7 +38,18 @@
         <el-radio v-model="teacherInfo.gender" label="F">女</el-radio>            
       </el-form-item>
       <el-form-item label="头像" prop="avatar">
-        <el-input v-model="teacherInfo.avatar" placeholder="请填写头像地址"></el-input>        
+        <el-upload
+          class="upload-demo"
+          drag
+          :action="url"
+          :before-upload="beforeUpload"
+          :on-success="handleSuccess"
+          name="image">
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
+          <el-input v-model="teacherInfo.avatar" type="hidden" size="small"></el-input>
+        </el-upload>   
+      </el-form-item>    
       </el-form-item>
       <el-form-item label="电话号码" prop="phoneNumber">
         <el-input v-model.number="teacherInfo.phoneNumber" placeholder="请输入电话号码"></el-input>
@@ -100,6 +111,7 @@
 
 <script>
 import {OK_CODE} from 'api/config'
+import {mapGetters} from 'vuex'
 import {getTeacherById, addTeacher, editTeacher} from 'api/teacher'
 export default {
   data () {
@@ -197,6 +209,14 @@ export default {
       }
     }
   },
+  computed: {
+    url () {
+      return `/api/upload?token=${this.token}`
+    },
+    ...mapGetters([
+      'token'
+    ])
+  },
   created () {
     const id = this.$route.params.id
     if (id) {
@@ -244,6 +264,28 @@ export default {
           this.$router.push(`/admin/teacher/${this.teacherInfo._id}`)
         }
       })
+    },
+    beforeUpload (file) {
+      const type = file.type
+      const reg = /^(image)/i
+      if (!reg.test(type)) {
+        this.$message.error('请选择正确图片')
+        return false
+      }
+    },
+    handleSuccess (response, file, fileList) {
+      if (response.code === OK_CODE) {
+        this.$message({
+          type: 'success',
+          message: response.msg
+        })
+        this.teacherInfo.avatar = response.url
+      } else {
+        this.$message({
+          type: 'error',
+          message: '上传失败，请重新上传'
+        })
+      }
     },
     _getTeacherById (id) {
       getTeacherById(id).then((res) => {

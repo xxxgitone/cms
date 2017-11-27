@@ -5,8 +5,8 @@
         <el-button type="danger" icon="delete" @click="deleteSelection">批量删除</el-button>
         <search-boxs 
           @handleChange="handleChange" 
-          @query="searchByQuery"
-        ></search-boxs>
+          @query="searchByQuery">
+        </search-boxs>
       </el-col>
       <el-col :span="4" class="add">
         <el-button type="primary" icon="plus" @click="handleAdd">添加用户</el-button>
@@ -15,9 +15,7 @@
         :title="title"
         :visible.sync="dialogVisible"
         label-position="right"
-        size="tiny"
-        :before-close="handleClose"
-      >
+        :before-close="handleClose">
         <el-form :model="userInfo" ref="form" :rules="rules" label-width="80px">
           <el-row>
             <el-col :span="12">
@@ -53,8 +51,7 @@
               type="date"
               placeholder="选择日期"
               :editable="editable"
-              :picker-options="pickerOptions"
-            >
+              :picker-options="pickerOptions">
             </el-date-picker>
           </el-form-item>
           <el-form-item label="身份" prop="role">
@@ -76,6 +73,19 @@
                 :value="item.value"
               ></el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="头像" prop="avatar">
+            <el-upload
+              class="upload-demo"
+              drag
+              :action="url"
+              :before-upload="beforeUpload"
+              :on-success="handleSuccess"
+              name="image">
+              <i class="el-icon-upload"></i>
+              <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
+              <el-input v-model="userInfo.avatar" type="hidden" size="small"></el-input>
+            </el-upload>   
           </el-form-item>
         </el-form>
         <div slot="footer">
@@ -163,6 +173,7 @@
 
 <script>
 import {OK_CODE, ERR_CODE} from 'api/config'
+import {mapGetters} from 'vuex'
 import {getUsers, addUser, editUser, deleteUser} from 'api/user'
 import {setEmptyString, getIds} from 'common/js/utils'
 import {managePageMixin} from 'common/js/mixin'
@@ -263,6 +274,12 @@ export default {
     }
   },
   computed: {
+    url () {
+      return `/api/upload?token=${this.token}`
+    },
+    ...mapGetters([
+      'token'
+    ]),
     title () {
       if (this.operationType === 'add') {
         return '添加用户'
@@ -413,6 +430,28 @@ export default {
             this._getUsersByQuery()
           })
         }).catch(() => {})
+      }
+    },
+    beforeUpload (file) {
+      const type = file.type
+      const reg = /^(image)/i
+      if (!reg.test(type)) {
+        this.$message.error('请选择正确图片')
+        return false
+      }
+    },
+    handleSuccess (response, file, fileList) {
+      if (response.code === OK_CODE) {
+        this.$message({
+          type: 'success',
+          message: response.msg
+        })
+        this.userInfo.avatar = response.url
+      } else {
+        this.$message({
+          type: 'error',
+          message: '上传失败，请重新上传'
+        })
       }
     },
     _getUsers (data) {

@@ -47,7 +47,6 @@
       </el-form-item>
       <el-form-item label="课程图片" prop="picUrl">
         <el-upload
-          class="upload-demo"
           drag
           :action="url"
           :before-upload="beforeUpload"
