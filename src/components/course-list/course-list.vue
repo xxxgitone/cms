@@ -1,10 +1,14 @@
 <template>
   <div class="course-list">
     <el-card :body-style="{ padding: '0px' }" v-for="item in data" :key="item._id">
-      <img src="http://px.thea.cn/Public/Upload/2687389/Intro/1458272781.png">
+      <img :src="item.picUrl">
       <div class="course-info">
         <el-row class="course-info-top">
-          <el-col :span="18" class="course-title">{{item.courseName}}</el-col>
+          <el-col :span="18" class="course-title">
+            {{item.courseName}}
+            <el-tag type="success">{{item.tag}}</el-tag>
+            <el-tag type="warning">{{item.courseType | formatType}}</el-tag>            
+          </el-col>
           <el-col :span="6">
             <i-svg icon="seeuser" :i-style="{'margin-right': '0'}"></i-svg>
             <span class="student-num">55</span>

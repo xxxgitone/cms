@@ -2,13 +2,16 @@
   <div class="course-detail">
     <el-row class="course-info">
       <el-col :span="12" class="course-img">
-        <img src="http://px.thea.cn/Public/Upload/2687389/Intro/1458272781.png" alt="">
+        <img :src="course.picUrl" alt="">
         <p class="campus">
           <span>授课校区：{{course.campus}}</span>
         </p>
       </el-col>
       <el-col :span="12">
-        <h3 class="courseName">{{course.courseName}}</h3>
+        <h3 class="courseName">
+          {{course.courseName}}
+          <el-tag type="success">{{course.courseType | formatType}}</el-tag>
+        </h3>
         <el-row>
           <el-col :span="3">任课老师</el-col>
           <el-col :span="21">{{course.teacher}}</el-col>          
@@ -26,20 +29,16 @@
           <el-col :span="21">{{course.price}}</el-col>          
         </el-row>
         <el-row>
+          <el-col :span="3">开课时间</el-col>
+          <el-col :span="21">{{course.startDate | formatDate}}</el-col>          
+        </el-row>
+        <el-row>
+          <el-col :span="3">结课时间</el-col>
+          <el-col :span="21">{{course.endDate | formatDate}}</el-col>          
+        </el-row>
+        <el-row>
           <el-col :span="3">上课时间</el-col>
-          <el-col :span="21">每周六、日下午两点～四点</el-col>          
-        </el-row>
-        <el-row>
-          <el-col :span="3">学员人数</el-col>
-          <el-col :span="21">23</el-col>          
-        </el-row>
-        <el-row>
-          <el-col :span="3">预计人数</el-col>
-          <el-col :span="21">25</el-col>          
-        </el-row>
-        <el-row>
-          <el-col :span="3">适合人群</el-col>
-          <el-col :span="21">5岁～15岁</el-col>          
+          <el-col :span="21">{{course.classTime}}</el-col>          
         </el-row>
         <el-row>
           <el-col :span="3">课程评分</el-col>
@@ -235,6 +234,7 @@ export default {
       text-align: center;
       img {
         width: 400px;
+        height: 250px;
       }
       .campus {
         text-align: left;

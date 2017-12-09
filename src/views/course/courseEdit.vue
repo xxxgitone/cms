@@ -9,14 +9,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="分类" prop="tag">
-            <el-select v-model="courseInfo.tag" clearable placeholder="请选择分类">
-              <el-option 
-                v-for="item in tagOptions" 
-                :key="item.value" 
-                :label="item.label" 
-                :value="item.value"
-              ></el-option>
-            </el-select>
+            <el-input v-model="courseInfo.tag" placeholder="分类"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -42,8 +35,18 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item v-show="courseInfo.rate" label="评分" prop="rate" style="line-height:1.5">
+      <el-form-item label="评分" prop="rate" style="line-height:1.5">
         <el-rate v-model="courseInfo.rate"></el-rate>
+      </el-form-item>
+      <el-form-item label="课程类型" prop="courseType">
+        <el-select v-model="courseInfo.courseType" clearable placeholder="请选择课程类型">
+          <el-option 
+            v-for="item in typeOptions" 
+            :key="item.value" 
+            :label="item.label" 
+            :value="item.value"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="课程图片" prop="picUrl">
         <el-upload
@@ -55,10 +58,9 @@
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
           <el-input v-model="courseInfo.picUrl" type="hidden" size="small"></el-input>
-        </el-upload>   
-        
+        </el-upload>
       </el-form-item>
-      <el-form-item label="学费" prop="price" v-show="courseType === 'formal'">
+      <el-form-item label="学费" prop="price" v-show="courseInfo.courseType === 'formal'">
         <el-input v-model.number="courseInfo.price" placeholder="金额"></el-input>
       </el-form-item>
       <el-row>
@@ -73,6 +75,9 @@
           </el-form-item>
         </el-col>
       </el-row>
+      <el-form-item label="上课时间" prop="classTime">
+        <el-input v-model="courseInfo.classTime" placeholder="上课时间"></el-input>
+      </el-form-item>
       <el-form-item label="任课老师" prop="teacher">
         <el-select v-model="courseInfo.teacher" clearable placeholder="请选择任课老师">
           <el-option 
@@ -149,30 +154,50 @@ export default {
       ],
       teacherOptions: [
         {
-          value: '侯涛',
-          label: '侯涛'
+          value: '姚桂英',
+          label: '姚桂英'
         },
         {
-          value: '薛磊',
-          label: '薛磊'
+          value: '邓秀兰',
+          label: '邓秀兰'
+        },
+        {
+          value: '谭秀英',
+          label: '谭秀英'
+        },
+        {
+          value: '龙刚',
+          label: '龙刚'
+        },
+        {
+          value: '赖小涛',
+          label: '赖小涛'
+        },
+        {
+          value: '萧大磊',
+          label: '萧大磊'
+        },
+        {
+          value: '武洋',
+          label: '武洋'
+        },
+        {
+          value: '毛勇',
+          label: '毛勇'
+        },
+        {
+          value: '孙平',
+          label: '孙平'
         }
       ],
-      tagOptions: [
+      typeOptions: [
         {
-          value: '中国舞',
-          label: '中国舞'
+          value: 'audition',
+          label: '试听'
         },
         {
-          value: '钢琴',
-          label: '钢琴'
-        },
-        {
-          value: '美术',
-          label: '美术'
-        },
-        {
-          value: '武术',
-          label: '武术'
+          value: 'formal',
+          label: '正式'
         }
       ],
       courseInfo: {
@@ -185,6 +210,7 @@ export default {
         price: '',
         period: '',
         totalPeriod: '',
+        classTime: '',
         teacher: '',
         campus: '',
         introduction: '',
@@ -215,6 +241,12 @@ export default {
           {required: true, message: '请输入总课时'},
           {type: 'number', message: '请输入正确的总课时'}
         ],
+        classTime: [
+          {required: true, message: '请输入上课时间', trigger: 'blur'}
+        ],
+        courseType: [
+          {required: true, message: '请选择课程类型', trigger: 'blur'}
+        ],
         teacher: [
           {required: true, message: '请选择任课老师', trigger: 'change'}
         ],
@@ -228,9 +260,11 @@ export default {
   created () {
     const id = this.$route.params.id
     const {type} = this.$route.query
-    this.courseType = type
-    this.courseInfo.courseType = type
-    this.courseInfo.price = type === 'audition' ? 0 : ''
+    if (type) {
+      this.courseType = type
+      this.courseInfo.courseType = type
+      this.courseInfo.price = type === 'audition' ? 0 : ''
+    }
     if (id) {
       this.operationType = 'edit'
       this._getCourseById(id)
@@ -312,6 +346,7 @@ export default {
       getCourseById(id).then((res) => {
         if (res.code === OK_CODE) {
           this.courseInfo = res.course
+          console.log(this.courseInfo)
         }
       })
     }
