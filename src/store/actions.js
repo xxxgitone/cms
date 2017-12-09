@@ -23,7 +23,7 @@ export const GetUsetByToken = ({commit}) => {
       commit(types.SET_CAMPUS, res.user.campus)
       commit(types.SET_ACCOUNT, res.user.account)
       commit(types.SET_USER_NAME, res.user.userName)
-      // commit(types.SET_AVATAR, res.user.avatar)
+      commit(types.SET_AVATAR, res.user.avatar)
       return Promise.resolve(res.user)
     } else if (res.code === ERR_CODE) {
       return Promise.reject(res.msg)
@@ -39,6 +39,7 @@ export const Logout = ({commit}) => {
     commit(types.SET_CAMPUS, '')
     commit(types.SET_ACCOUNT, '')
     commit(types.SET_USER_NAME, '')
+    commit(types.SET_AVATAR, '')
     localStorage.clear(CMS_TOKEN)
     resolve()
   })

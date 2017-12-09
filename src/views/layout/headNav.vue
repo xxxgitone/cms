@@ -5,7 +5,7 @@
     <el-menu-item index="1">
       <el-dropdown @command="handleCommand">
         <span class="el-dropdown-link avatar">
-          <img src="../../common/img/jerry.jpeg">
+          <img :src="avatar">
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>个人中心</el-dropdown-item>
@@ -17,9 +17,14 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 
 export default {
+  computed: {
+    ...mapGetters([
+      'avatar'
+    ])
+  },
   methods: {
     handleCommand (command) {
       if (command === 'layout') {
