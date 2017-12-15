@@ -1,105 +1,162 @@
 <template>
   <div class="courseEdit">
-    <el-form :model="courseInfo" ref="form" :rules="rules" label-width="80px">
+    <el-form 
+      :model="courseInfo" 
+      ref="form" 
+      :rules="rules" 
+      label-width="80px">
       <el-row>
         <el-col :span="12">
-          <el-form-item label="课程名" prop="courseName">
-            <el-input v-model="courseInfo.courseName" placeholder="课程名"></el-input>
+          <el-form-item 
+            label="课程名" 
+            prop="courseName">
+            <el-input 
+              v-model="courseInfo.courseName" 
+              placeholder="课程名" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="分类" prop="tag">
-            <el-input v-model="courseInfo.tag" placeholder="分类"></el-input>
+          <el-form-item 
+            label="分类" 
+            prop="tag">
+            <el-input 
+              v-model="courseInfo.tag" 
+              placeholder="分类" />
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="开课时间" prop="startDate">
+          <el-form-item 
+            label="开课时间" 
+            prop="startDate">
             <el-date-picker 
               v-model="courseInfo.startDate"
               type="date"
               placeholder="选择日期"
-              :editable="editable">
-            </el-date-picker>
+              :editable="editable" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="结课时间" prop="endDate">
+          <el-form-item 
+            label="结课时间" 
+            prop="endDate">
             <el-date-picker 
               v-model="courseInfo.endDate"
               type="date"
               placeholder="选择日期"
-              :editable="editable">
-            </el-date-picker>
+              :editable="editable" />
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="评分" prop="rate" style="line-height:1.5">
-        <el-rate v-model="courseInfo.rate"></el-rate>
+      <el-form-item 
+        label="评分" 
+        prop="rate" 
+        style="line-height:1.5">
+        <el-rate v-model="courseInfo.rate" />
       </el-form-item>
-      <el-form-item label="课程类型" prop="courseType">
-        <el-select v-model="courseInfo.courseType" clearable placeholder="请选择课程类型">
+      <el-form-item 
+        label="课程类型" 
+        prop="courseType">
+        <el-select 
+          v-model="courseInfo.courseType" 
+          clearable 
+          placeholder="请选择课程类型">
           <el-option 
             v-for="item in typeOptions" 
             :key="item.value" 
             :label="item.label" 
-            :value="item.value"
-          ></el-option>
+            :value="item.value"/>
         </el-select>
       </el-form-item>
-      <el-form-item label="课程图片" prop="picUrl">
+      <el-form-item 
+        label="课程图片" 
+        prop="picUrl">
         <el-upload
           drag
           :action="url"
           :before-upload="beforeUpload"
           :on-success="handleSuccess"
           name="image">
-          <i class="el-icon-upload"></i>
+          <i class="el-icon-upload" />
           <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
-          <el-input v-model="courseInfo.picUrl" type="hidden" size="small"></el-input>
+          <el-input 
+            v-model="courseInfo.picUrl" 
+            type="hidden" 
+            size="small" />
         </el-upload>
       </el-form-item>
-      <el-form-item label="学费" prop="price" v-show="courseInfo.courseType === 'formal'">
-        <el-input v-model.number="courseInfo.price" placeholder="金额"></el-input>
+      <el-form-item 
+        label="学费" 
+        prop="price" 
+        v-show="courseInfo.courseType === 'formal'">
+        <el-input 
+          v-model.number="courseInfo.price" 
+          placeholder="金额" />
       </el-form-item>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="课时" prop="period">
-            <el-input v-model.number="courseInfo.period" placeholder="课时"></el-input>
+          <el-form-item 
+            label="课时" 
+            prop="period">
+            <el-input
+              v-model.number="courseInfo.period" 
+              placeholder="课时" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item label="总课时" prop="totalPeriod">
-            <el-input v-model.number="courseInfo.totalPeriod" placeholder="总课时"></el-input>
+          <el-form-item 
+            label="总课时" 
+            prop="totalPeriod">
+            <el-input 
+              v-model.number="courseInfo.totalPeriod" 
+              placeholder="总课时" />
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="上课时间" prop="classTime">
-        <el-input v-model="courseInfo.classTime" placeholder="上课时间"></el-input>
+      <el-form-item 
+        label="上课时间" 
+        prop="classTime">
+        <el-input 
+          v-model="courseInfo.classTime" 
+          placeholder="上课时间" />
       </el-form-item>
-      <el-form-item label="任课老师" prop="teacher">
-        <el-select v-model="courseInfo.teacher" clearable placeholder="请选择任课老师">
+      <el-form-item 
+        label="任课老师" 
+        prop="teacher">
+        <el-select 
+          v-model="courseInfo.teacher" 
+          filterable
+          clearable 
+          placeholder="请选择任课老师">
           <el-option 
             v-for="item in teacherOptions" 
             :key="item.value" 
             :label="item.label" 
-            :value="item.value"
-          ></el-option>
+            :value="item.value"/>
         </el-select>
       </el-form-item>
-      <el-form-item label="所属校区" prop="campus">
-        <el-select v-model="courseInfo.campus" clearable placeholder="请选择校区">
+      <el-form-item 
+        label="所属校区" 
+        prop="campus">
+        <el-select 
+          v-model="courseInfo.campus" 
+          clearable 
+          placeholder="请选择校区">
           <el-option 
             v-for="item in options" 
             :key="item.value" 
             :label="item.label" 
-            :value="item.value"
-          ></el-option>
+            :value="item.value"/>
         </el-select>
       </el-form-item>
-      <el-form-item label="课程介绍" prop="introduction">
-        <el-input type="textarea" placeholder="请填写课程介绍" v-model="courseInfo.introduction"></el-input>
+      <el-form-item 
+        label="课程介绍" 
+        prop="introduction">
+        <el-input 
+          type="textarea" 
+          placeholder="请填写课程介绍" 
+          v-model="courseInfo.introduction"/>
       </el-form-item>
     </el-form>
     <div class="handle-button">
@@ -122,6 +179,7 @@
 
 <script>
 import {addCourse, editCourse, getCourseById} from 'api/course'
+import {getCampusAllTeachers} from 'api/teacher'
 import {OK_CODE} from 'api/config'
 import {mapGetters} from 'vuex'
 
@@ -152,44 +210,7 @@ export default {
           label: '华泾校区'
         }
       ],
-      teacherOptions: [
-        {
-          value: '姚桂英',
-          label: '姚桂英'
-        },
-        {
-          value: '邓秀兰',
-          label: '邓秀兰'
-        },
-        {
-          value: '谭秀英',
-          label: '谭秀英'
-        },
-        {
-          value: '龙刚',
-          label: '龙刚'
-        },
-        {
-          value: '赖小涛',
-          label: '赖小涛'
-        },
-        {
-          value: '萧大磊',
-          label: '萧大磊'
-        },
-        {
-          value: '武洋',
-          label: '武洋'
-        },
-        {
-          value: '毛勇',
-          label: '毛勇'
-        },
-        {
-          value: '孙平',
-          label: '孙平'
-        }
-      ],
+      teacherOptions: [],
       typeOptions: [
         {
           value: 'audition',
@@ -258,6 +279,7 @@ export default {
     }
   },
   created () {
+    this._getTeacherOptions()
     const id = this.$route.params.id
     const {type} = this.$route.query
     if (type) {
@@ -275,7 +297,8 @@ export default {
       return `/api/upload?token=${this.token}`
     },
     ...mapGetters([
-      'token'
+      'token',
+      'campus'
     ])
   },
   methods: {
@@ -347,6 +370,18 @@ export default {
         if (res.code === OK_CODE) {
           this.courseInfo = res.course
           console.log(this.courseInfo)
+        }
+      })
+    },
+    _getTeacherOptions () {
+      getCampusAllTeachers(this.campus).then(res => {
+        if (res.code === OK_CODE) {
+          this.teacherOptions = res.teachers.map(item => {
+            return {
+              value: item.userName,
+              label: item.userName
+            }
+          })
         }
       })
     }

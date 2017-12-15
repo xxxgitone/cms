@@ -10,6 +10,12 @@ export const getTeachers = (data) => {
   })
 }
 
+export const getCampusAllTeachers = (campus) => {
+  let url = '/api/getAllTeachers'
+  return axios.get(`${url}?campus=${campus}`)
+  .then(res => Promise.resolve(res.data))
+}
+
 export const getTeacherById = (id) => {
   let url = '/api/teacher'
   return axios.get(`${url}?_id=${id}`)
