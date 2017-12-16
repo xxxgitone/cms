@@ -28,7 +28,7 @@
         <template>
           <li class="comments-item" v-for="reply in comment.reply" :key="reply._id">
             <div class="comment-wrapper">
-              <img src="../../common/img/jerry.jpeg" >
+              <img :src="reply.from.avatar" >
               <div class="comment-info">
                 <span class="nickname">{{ reply.from.userName }}
                   <span>[{{ reply.from.role | formatRole }}]</span>

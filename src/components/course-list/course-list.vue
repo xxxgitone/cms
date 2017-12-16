@@ -1,30 +1,48 @@
 <template>
   <div class="course-list">
-    <el-card :body-style="{ padding: '0px' }" v-for="item in data" :key="item._id">
+    <el-card 
+      :body-style="{ padding: '0px' }" 
+      v-for="item in data" 
+      :key="item._id">
       <img :src="item.picUrl">
       <div class="course-info">
         <el-row class="course-info-top">
-          <el-col :span="18" class="course-title">
-            {{item.courseName}}
-            <el-tag type="success">{{item.tag}}</el-tag>
-            <el-tag type="warning">{{item.courseType | formatType}}</el-tag>            
+          <el-col 
+            :span="18" 
+            class="course-title">
+            {{ item.courseName }}
+            <el-tag type="success">{{ item.tag }}</el-tag>
+            <el-tag type="warning">{{ item.courseType | formatType }}</el-tag>            
           </el-col>
           <el-col :span="6">
-            <i-svg icon="seeuser" :i-style="{'margin-right': '0'}"></i-svg>
+            <i-svg 
+              icon="seeuser" 
+              :i-style="{'margin-right': '0'}" />
             <span class="student-num">55</span>
           </el-col>
         </el-row>
         <el-row class="course-info-bottom">
-          <el-col :span="18" class="course-campus">{{item.campus}}</el-col>
+          <el-col 
+            :span="18" 
+            class="course-campus">{{ item.campus }}</el-col>
           <el-col :span="6">
-            <span class="course-teacher">{{item.teacher}}</span>
+            <span class="course-teacher">{{ item.teacher }}</span>
           </el-col>
         </el-row>
       </div>
       <div class="tool-mask">  
-        <i-svg icon="edit" :i-style="{width: '45px', height: '22px'}" @clicked="edit(item)"></i-svg>
-        <i-svg icon="eye" :i-style="{width: '45px', height: '22px'}" @clicked="checked(item)"></i-svg>
-        <i-svg icon="delete" :i-style="{width: '45px', height: '22px'}" @clicked="deleted(item)"></i-svg>
+        <i-svg 
+          icon="edit" 
+          :i-style="{width: '45px', height: '22px'}" 
+          @clicked="edit(item)" />
+        <i-svg 
+          icon="eye" 
+          :i-style="{width: '45px', height: '22px'}" 
+          @clicked="checked(item)" />
+        <i-svg 
+          icon="delete" 
+          :i-style="{width: '45px', height: '22px'}" 
+          @clicked="deleted(item)" />
       </div>
     </el-card>
   </div>
