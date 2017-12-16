@@ -20,6 +20,7 @@ const ReservationAudition = () => import('views/audition/reservationAudition')
 const CommentList = () => import('views/comment-list/comment-list')
 const Task = () => import('views/task/task')
 const TaskSchedule = () => import('views/task/taskSchedule')
+const PersonalInfo = () => import('views/userManage/personalInfo')
 
 Vue.use(Router)
 
@@ -156,6 +157,12 @@ export default new Router({
           component: TaskSchedule,
           name: ['任务列表'],
           meta: {role: ['front']}
+        },
+        {
+          path: 'personal',
+          component: PersonalInfo,
+          name: ['个人信息'],
+          meta: {role: ['admin', 'front']}
         }
       ]
     }

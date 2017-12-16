@@ -1,14 +1,12 @@
 <template>
-  <el-menu 
-    mode="horizontal"
-  >
+  <el-menu mode="horizontal">
     <el-menu-item index="1">
       <el-dropdown @command="handleCommand">
         <span class="el-dropdown-link avatar">
           <img :src="avatar">
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>个人中心</el-dropdown-item>
+          <el-dropdown-item command="personal">个人中心</el-dropdown-item>
           <el-dropdown-item command="layout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -36,6 +34,8 @@ export default {
             type: 'success'
           })
         })
+      } else if (command === 'personal') {
+        this.$router.push('/admin/personal')
       }
     },
     ...mapActions([
