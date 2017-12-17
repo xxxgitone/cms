@@ -64,7 +64,8 @@
           label="应交" 
           width="80" 
           prop="receivable"
-        ></el-table-column>
+        >
+        </el-table-column>
         <el-table-column 
           label="实交" 
           width="80" 
@@ -86,18 +87,6 @@
         width="100" 
         prop="campus"
       ></el-table-column>
-      <el-table-column 
-        label="开始时间" 
-        width="160"
-      >
-        <template scope="scope">{{ scope.row.startDate | formatDate }}</template>
-      </el-table-column>
-      <el-table-column 
-        label="结束时间" 
-        width="160"
-      >
-        <template scope="scope">{{ scope.row.endDate | formatDate }}</template>
-      </el-table-column>
       <el-table-column 
         label="报名时间" 
         width="160"
