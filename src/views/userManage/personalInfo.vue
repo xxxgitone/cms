@@ -2,7 +2,10 @@
   <div class="personal-info">
     <div class="user-avatar">
       <img :src="user.avatar">
-      <el-upload>
+      <el-upload
+        :action="url"
+        :before-upload="beforeUpload"
+        :on-success="handleSuccess">
         <el-button 
           size="mini" 
           type="primary">
