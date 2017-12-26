@@ -1,23 +1,16 @@
 <template>
   <div class="order-manage">
     <el-row class="search-boxs">
-      <!-- @click="deleteSelection" -->
-      <el-button type="danger" icon="delete">批量删除</el-button>
       <search-boxs 
         @handleChange="handleChange" 
         @query="searchByQuery">
       </search-boxs>
     </el-row> 
-    <!-- @selection-change="handleSelectionChange" -->
     <el-table
       v-loading.body="dataLoading"
       :data="orders"
       border
       tooltip-effect="dark">
-      <el-table-column 
-        type="selection" 
-        width="55">
-      </el-table-column>
       <el-table-column 
         label="订单号" 
         width="120" 
@@ -50,6 +43,15 @@
         prop="student.studentName">
       </el-table-column>
       <el-table-column 
+        label="欠费" 
+        width="80">
+        <template scope="scope">
+          <el-tag :type="scope.row.revenue < scope.row.receivable > 0 ? 'danger' : 'primary'">
+            {{ scope.row.revenue < scope.row.receivable ? scope.row.receivable - scope.row.revenue : '无'}}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column 
         label="所属校区" 
         width="100" 
         prop="campus">
@@ -78,10 +80,15 @@
         label="操作" 
         width="140">
         <template scope="scope">
-           <!-- @click="handleEdit(scope.$index, scope.row)" -->
-           <!-- @click="handleDelete(scope.$index, scope.row)" -->
-          <el-button :plain="true" type="info" size="small">编辑</el-button>
           <el-button type="danger" size="small">删除</el-button>
+          <el-button 
+            :plain="true" 
+            type="info" 
+            size="small" 
+            v-if="scope.row.revenue < scope.row.receivable"
+            @click="afterPayment(scope.$index, scope.row)">
+            补交
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -95,12 +102,24 @@
         </el-pagination>
       </el-col>
     </el-row>
+    <el-dialog
+      title="补交金额"
+      :visible.sync="dialogVisible"
+      size="tiny">
+      <el-input v-model="data.renewFee" placeholder="请输入补交金额"></el-input>
+      <span slot="footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitPayment">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import {getOrders} from 'api/order'
 import {OK_CODE} from 'api/config'
+import {addAfterPayment} from 'api/renew'
+import {mapGetters} from 'vuex'
 import SearchBoxs from 'components/search-boxs/search-boxs'
 
 export default {
@@ -112,11 +131,20 @@ export default {
       campusVal: '',
       currentPage: 1,
       query: '',
-      pagenum: 1
+      pagenum: 1,
+      data: {
+        renewFee: 0
+      },
+      dialogVisible: false
     }
   },
   created () {
     this._getOrdersByQuery()
+  },
+  computed: {
+    ...mapGetters([
+      'campus'
+    ])
   },
   methods: {
     handleChange (val) {
@@ -136,6 +164,24 @@ export default {
     handleCurrentChange (val) {
       this.pagenum = val
       this.$router.push(`/admin/order?pagenum=${this.pagenum}`)
+    },
+    afterPayment (index, row) {
+      this.renewFee = row.receivable - row.revenue
+      this.data = {
+        order: row._id,
+        campus: this.campus,
+        renewFee: this.renewFee,
+        createAt: +new Date()
+      }
+      this.dialogVisible = true
+    },
+    submitPayment () {
+      addAfterPayment(this.data).then(res => {
+        if (res.code === OK_CODE) {
+          this._getOrdersByQuery()
+        }
+        this.dialogVisible = false
+      })
     },
     _getOrders (data) {
       this.dataLoading = true

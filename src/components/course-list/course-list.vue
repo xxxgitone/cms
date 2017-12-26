@@ -8,17 +8,18 @@
       <div class="course-info">
         <el-row class="course-info-top">
           <el-col 
-            :span="18" 
+            :span="10" 
             class="course-title">
             {{ item.courseName }}
-            <el-tag type="success">{{ item.tag }}</el-tag>
-            <el-tag type="warning">{{ item.courseType | formatType }}</el-tag>            
+                       
           </el-col>
-          <el-col :span="6">
-            <i-svg 
+          <el-col :span="14">
+            <el-tag type="success">{{ item.tag }}</el-tag>
+            <el-tag type="warning">{{ item.courseType | formatType }}</el-tag> 
+            <!-- <i-svg 
               icon="seeuser" 
               :i-style="{'margin-right': '0'}" />
-            <span class="student-num">55</span>
+            <span class="student-num">55</span> -->
           </el-col>
         </el-row>
         <el-row class="course-info-bottom">
