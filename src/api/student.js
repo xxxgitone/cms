@@ -5,17 +5,19 @@ export const getStudents = (data) => {
   let url = '/api/students'
   url += '?' + param(data)
   return axios.get(url)
-  .then((res) => {
-    return Promise.resolve(res.data)
-  })
+  .then((res) => Promise.resolve(res.data))
+}
+
+export const getStudentsCountByDate = (date, campus) => {
+  let url = '/api/students/count'
+  return axios.get(`${url}?date=${date}&campus=${campus}`)
+  .then(res => Promise.resolve(res.data))
 }
 
 export const deleteStudent = (_id) => {
   const url = '/api/students'
   return axios.delete(`${url}?_id=${_id}`)
-  .then((res) => {
-    return Promise.resolve(res.data)
-  })
+  .then((res) => Promise.resolve(res.data))
 }
 
 export const getStudentsByCourseId = (_id) => {

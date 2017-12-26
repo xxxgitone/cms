@@ -6,6 +6,12 @@ export const getAuditions = () => {
   .then(res => Promise.resolve(res.data))
 }
 
+export const getAuditionsCountByDate = (date, campus) => {
+  let url = '/api/audition/count'
+  return axios.get(`${url}?date=${date}&campus=${campus}`)
+  .then(res => Promise.resolve(res.data))
+}
+
 export const getAuditionsByCourseId = (id) => {
   const url = '/api/auditionsByCourseId'
   console.log(`${url}？_id=${id}`)
