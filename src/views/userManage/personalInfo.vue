@@ -5,12 +5,17 @@
       <el-upload
         :action="url"
         :before-upload="beforeUpload"
-        :on-success="handleSuccess">
+        :on-success="handleSuccess"
+        name="image">
         <el-button 
           size="mini" 
           type="primary">
           修改头像
         </el-button>
+        <el-input 
+          v-model="avatar" 
+          type="hidden" 
+          size="small" />
       </el-upload>
     </div>
     <el-row>
@@ -37,33 +42,66 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
-import {getUserByToken} from 'api/user'
+import {mapGetters, mapMutations} from 'vuex'
+import {getUserByToken, editUser} from 'api/user'
 import {OK_CODE} from 'api/config'
 
 export default {
   data () {
     return {
-      user: {}
+      user: {
+        avatar: ''
+      }
     }
   },
   created () {
     this._getUserByToken()
   },
   computed: {
+    url () {
+      return `/api/upload?token=${this.token}`
+    },
     ...mapGetters([
-      'id'
+      'id',
+      'token'
     ])
   },
   methods: {
+    beforeUpload (file) {
+      const type = file.type
+      const reg = /^(image)/i
+      if (!reg.test(type)) {
+        this.$message.error('请选择正确图片')
+        return false
+      }
+    },
+    handleSuccess (response, file, fileList) {
+      if (response.code === OK_CODE) {
+        this.user.avatar = response.url
+        editUser(this.user).then(res => {
+          this.setAvatar(this.user.avatar)
+          this.$message({
+            type: 'success',
+            message: '修改头像成功'
+          })
+        })
+      } else {
+        this.$message({
+          type: 'error',
+          message: '上传失败，请重新上传'
+        })
+      }
+    },
     _getUserByToken () {
       getUserByToken().then(res => {
         if (res.code === OK_CODE) {
           this.user = res.user
-          console.log(this.user)
         }
       })
-    }
+    },
+    ...mapMutations({
+      'setAvatar': 'SET_AVATAR'
+    })
   }
 }
 </script>
