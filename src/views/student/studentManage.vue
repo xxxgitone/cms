@@ -59,29 +59,6 @@
           </router-link>
         </template>
       </el-table-column>
-      <el-table-column label="费用">
-        <el-table-column 
-          label="应交" 
-          width="80" 
-          prop="receivable"
-        >
-        </el-table-column>
-        <el-table-column 
-          label="实交" 
-          width="80" 
-          prop="revenue"
-        ></el-table-column>
-        <el-table-column 
-          label="欠费" 
-          width="80" 
-        >
-          <template scope="scope">
-            <el-tag :type="Number(scope.row.arrears) > 0 ? 'danger' : 'primary'">
-              {{ Number(scope.row.arrears) > 0 ? scope.row.arrears : '无'}}
-            </el-tag>
-          </template>
-        </el-table-column>
-      </el-table-column>
       <el-table-column 
         label="所属校区" 
         width="100" 
@@ -92,16 +69,6 @@
         width="160"
       >
         <template scope="scope">{{ scope.row.applyDate | formatDate }}</template>
-      </el-table-column>
-      <el-table-column 
-        label="是否停课" 
-        width="100" 
-      >
-        <template scope="scope">
-          <el-tag :type="scope.row.closed ? 'danger' : 'primary'">
-            {{ scope.row.closed ? '是' : '否'}}
-          </el-tag>
-        </template>
       </el-table-column>
       <el-table-column 
         label="操作" 
